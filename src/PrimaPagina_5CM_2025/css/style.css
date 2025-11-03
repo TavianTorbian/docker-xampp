@@ -1,13 +1,56 @@
-h1
+body
 {
+    margin: auto;
+}
+header h1
+{
+    margin: auto;
+}
+header
+{
+    margin: auto;
+    padding-top: 15px;
+    background-color: blue;
     color: white;
-    background-color: #713bc7;
+    text-align: center;
 }
-.orario
+nav
 {
-    color: blue;
+    margin-top: 15px;
+    background-color: aqua;
+    color: black;
 }
-#titolo
+nav ul
 {
-    background-color: black;
+    display: inline-flex;
+    list-style-type: none;
 }
+nav li
+{
+    padding: 5px;
+}
+nav a
+{
+    padding: 5px;
+    text-decoration: none;
+}
+nav a:hover
+{
+    text-decoration: red underline !important;
+}
+nav a:active
+{
+    background-color: blue;
+}
+section
+{
+    padding-left: 30px;
+}
+footer
+{
+    padding-left: 30px;
+    background-color: blue;
+    font-size: 0.5m;
+    color:white;
+}
+
