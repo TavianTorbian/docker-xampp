@@ -31,9 +31,9 @@ SELECT m.Codice, COUNT(*) AS NumeroProdotti
 FROM Magazzini m
 WHERE (
         SELECT COUNT(*)
-                FROM Prodotti p
-                        WHERE p.Codice = m.Codice
-                            ) > 50;
+        FROM Prodotti p
+        WHERE p.Codice = m.Codice
+        ) > 50;
 
 --7)la lista dei prodotti che utilizzano almeno una materia prima che non è contenuta in alcun magazzino
 SELECT DISTINCT p.Id, p.Nome
