@@ -20,9 +20,9 @@ JOIN Prodotti p ON d.Matricola = p.Matricola
 WHERE p.Id = null;
 
 --5)le migliori 10 materie prime che vengono utilizzata in maggior quantità (intesa come peso totale, non numero di utilizzi)
-SELECT m.Tipologia, SUM(r.Qta * m.PesoUnitario) AS PesoTotaleUtilizzato
-FROM MateriePrime m
-JOIN Ricette r
+SELECT r.Tipologia, SUM(r.Qta * m.PesoUnitario) AS PesoTotaleUtilizzato
+FROM MateriePrime m JOIN Ricette r
+GROUP BY r.Tipologia
 ORDER BY PesoTotaleUtilizzato DESC
 LIMIT 10;
 
@@ -33,7 +33,8 @@ WHERE (
         SELECT COUNT(*)
         FROM Prodotti p
         WHERE p.Codice = m.Codice
-        ) > 50;
+        ) > 50
+GROUP BY m.Codice;
 
 --7)la lista dei prodotti che utilizzano almeno una materia prima che non è contenuta in alcun magazzino
 SELECT DISTINCT p.Id, p.Nome
