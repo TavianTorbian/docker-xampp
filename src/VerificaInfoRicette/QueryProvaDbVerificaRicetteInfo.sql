@@ -43,18 +43,3 @@ JOIN MateriePrime m ON r.Tipologia = m.Tipologia
 WHERE m.Codice =null;
 
 --8)la lista dei prodotti il cui costa totale delle materie prime supera la media dei costi totali di tutti i prodotti
-SELECT p.Id, p.Nome, SUM(r.Qta * m.CostoUnitario) AS CostoTotale
-FROM Prodotti p
-JOIN Ricette r ON p.Id = r.Id
-JOIN MateriePrime m ON r.Tipologia = m.Tipologia
-GROUP BY p.Id, p.Nome
-HAVING SUM(r.Qta * m.CostoUnitario) > (
-                                        SELECT AVG(CostoTotale)
-                                        FROM (
-                                                SELECT SUM(r2.Qta * m2.CostoUnitario) AS CostoTotale
-                                                FROM Prodotti p2
-                                                JOIN Ricette r2 ON p2.Id = r2.Id
-                                                JOIN MateriePrime m2 ON r2.Tipologia = m2.Tipologia
-                                                GROUP BY p2.Id
-                                            ) AS Media
-                                    );
