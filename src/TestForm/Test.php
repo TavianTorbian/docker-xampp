@@ -33,7 +33,7 @@
   }
   elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
-    echo "POST:";
+    echo "POST:<br>";
     print_r($_POST);
 
     //visualizza i dati ricevuti dalla post/get
