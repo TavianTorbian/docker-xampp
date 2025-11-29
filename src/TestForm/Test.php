@@ -5,7 +5,7 @@
   echo "Contenuto della richiesta:<br>";
   if ($_SERVER['REQUEST_METHOD'] === 'GET')
   {
-    echo "GET:<br>";
+    echo "GET: ";
     print_r($_GET);
 
     //visualizza i dati ricevuti dalla post/get
@@ -18,7 +18,7 @@
   }
   elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
-    echo "POST:";
+    echo "POST: ";
     print_r($_POST);
 
     //visualizza i dati ricevuti dalla post/get
