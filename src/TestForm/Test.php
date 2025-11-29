@@ -25,6 +25,7 @@
         echo "$key=$value";
         echo "<br>";
     }
+    echo "Login Effettuato!"
   }
   elseif ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
@@ -36,4 +37,5 @@
         echo "$key=$value";
         echo "<br>";
     }
+    echo "Login Effettuato!"
   }
