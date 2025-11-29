@@ -1,6 +1,5 @@
 <?php
   echo "Tipo di richiesta: " . $_SERVER['REQUEST_METHOD'] . "<br>";
-
   echo "<br>";
 
   echo "Visualizzazione della varabile \$_REQUEST con echo:<br>";
