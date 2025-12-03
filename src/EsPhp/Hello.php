@@ -14,7 +14,7 @@
     
     echo "Connessione al database riuscita con mysqli! <br>";
 
-    $Nome = "Mario Rossi";
+    $Nome = "mario.rossi";
     $password = "$2b$10$5cM8wE1tQ4rS7nL9oF2pG6bV3dH8xT0aK4mP2rN7gL6cQ3sJ1uZw";
 
     $query = "SELECT * FROM User WHERE Nome = '$Nome' AND password = '$password'";
