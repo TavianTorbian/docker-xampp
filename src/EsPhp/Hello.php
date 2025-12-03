@@ -1,28 +1,30 @@
 <?php
+    $host = 'db'; 
+    $dbname = 'root_db'; 
+    $user = 'user';
+    $password = 'user';
+    $port = 3306;
+    
+    $connection = new mysqli($host, $user, $password, $dbname, $port);
+    
+    if ($connection->connect_error) 
+    {
+        die("Errore di connessione: " . $connection->connect_error);
+    }
+    
+    echo "Connessione al database riuscita con mysqli! <br>";
 
-//presi dal docker-compose.yml
-$host = 'db'; 
-$dbname = 'root_db'; 
-$user = 'user';
-$password = 'user';
-$port = 3306;
+    $Nome = "Mario Rossi";
+    $password = "$2b$10$5cM8wE1tQ4rS7nL9oF2pG6bV3dH8xT0aK4mP2rN7gL6cQ3sJ1uZw";
 
-$connection = new mysqli($host, $user, $password, $dbname, $port);
+    $query = "SELECT * FROM User WHERE Nome = '$Nome' AND password = '$password'";
 
-if ($connection->connect_error) {
-    die("Errore di connessione: " . $connection->connect_error);
-}
+    echo $query;
+    echo "<br>";
 
-echo "Connessione al database riuscita con mysqli!";
-$connection->close();
+    $result = $connection->query($query);
 
-$email="nicola@ciao.it";
-$password="ciaociao!"
-$query = "SELECT * FROM users WHERE email='$email' && password='$password'";
-
-echo $query "<br>";
-$result = $conn->query($query);
-
-vardump($result);
-$connection->close();
+    var_dump($result);
+    
+    $connection->close();
 ?>
