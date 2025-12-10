@@ -12,13 +12,18 @@
         die("Errore di connessione: " . $connection->connect_error);
     }
     
-    $username=$_POST['username'];
-    $password=$_POST['password'];
+    $username=htmlspecialcharts($_POST['username']);
+    $password=htmlspecialcharts($_POST['password']);
 
     echo "Connessione al database riuscita con mysqli! <br>";
-    $query = "SELECT * FROM GiveMe WHERE username = '$username' AND password = '$password'";
+    $stmt = $connection->prepare("SELECT * FROM GiveMe WHERE username = ? AND password = ?")
 
-    $result = $connection->query($query);
+    $stmt->bind_param("s", $username);
+    $stmt->bind_param("s", $password);
+
+    $connection->execute();
+
+    $result = $connection->get_result();
 
     var_dump($result);
 
@@ -31,6 +36,4 @@
     }
     
     $connection->close();
-
-
 ?>
