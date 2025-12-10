@@ -33,9 +33,16 @@
         $result = $connection->query($query);
         echo "Tabella Utenti contiene: $result->num_rows <br>";
         echo "<table>";
+        echo "<tr>";
+        echo "<th>Username</th>";
+        echo "<th>Password</th>";
+        echo "</tr>";
         while($row = $result->fetch_assoc())
         {
-            echo $row['username'] . " " . $row['password'] . "<br>";
+            echo "<tr>";
+            echo "<td>". $row['username'] . "</td>";
+            echo  "<td>" . $row['password'] . "</td>";
+            echo "</tr>";
         }
         echo "</table>";
       }
