@@ -34,7 +34,7 @@
         echo "Tabella Utenti contiene: $result->num_rows <br>";
         while($row = $result->fetch_assoc())
         {
-            vardump($row);
+            var_dump($row);
         }
       }
     }
