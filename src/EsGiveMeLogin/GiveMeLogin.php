@@ -32,10 +32,12 @@
         $query = "SELECT * FROM GiveMe";
         $result = $connection->query($query);
         echo "Tabella Utenti contiene: $result->num_rows <br>";
+        echo "<table>";
         while($row = $result->fetch_assoc())
         {
-            var_dump($row);
+            echo $row['username'] . " " . $row['password'] . "<br>";
         }
+        echo "</table>";
       }
     }
     else {
