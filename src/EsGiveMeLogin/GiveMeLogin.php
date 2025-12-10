@@ -24,11 +24,15 @@
 
     $result = $stmt->get_result();
 
-    var_dump($result);
-
     if ($result-> num_rows > 0)
     {
       echo "Login Effettuato!";
+      if($username=='Thomas' && $password=='tavianipezzoschifo')
+      {
+        $query = "SELECT * FROM GiveMe";
+        $result = $connection->query($query);
+
+      }
     }
     else {
         echo "Login non riuscito!";

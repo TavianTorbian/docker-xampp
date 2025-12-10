@@ -21,9 +21,6 @@
     $query = "SELECT * FROM GiveMe WHERE username = '$username'";
     $result = $connection->query($query);
 
-
-    var_dump($result);
-
     if($result->num_rows == 0){
         $query = "INSERT INTO GiveMe(username, password) VALUES('$username','$password')";
         $result = $connection->query($query);
