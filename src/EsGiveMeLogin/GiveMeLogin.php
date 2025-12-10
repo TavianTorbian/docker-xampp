@@ -26,16 +26,20 @@
 
     if ($result-> num_rows > 0)
     {
-      echo "Login Effettuato!";
+      echo "Login Effettuato! <br>";
       if($username=='Thomas' && $password=='tavianipezzoschifo')
       {
         $query = "SELECT * FROM GiveMe";
         $result = $connection->query($query);
-
+        echo "Tabella Utenti contiene: $result->num_rows <br>";
+        while($row = $result->fetch_assoc())
+        {
+            vardump($row);
+        }
       }
     }
     else {
-        echo "Login non riuscito!";
+        echo "Login non riuscito! <br>";
     }
     
     $connection->close();

@@ -24,11 +24,11 @@
     if($result->num_rows == 0){
         $query = "INSERT INTO GiveMe(username, password) VALUES('$username','$password')";
         $result = $connection->query($query);
-        echo "Registrazione effettuata!";
+        echo "Registrazione effettuata! <br>";
     }
     else{
         echo "Registrazione non effettuata! <br>";
-        echo "Utente già presente!";
+        echo "Utente già presente! <br>";
     }
 
     $connection->close();
