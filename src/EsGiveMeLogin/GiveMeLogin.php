@@ -32,7 +32,7 @@
         $query = "SELECT * FROM GiveMe";
         $result = $connection->query($query);
         echo "Tabella Utenti contiene: $result->num_rows <br>";
-        echo "<table>";
+        echo "<table border=1>";
         echo "<tr>";
         echo "<th>Username</th>";
         echo "<th>Password</th>";
