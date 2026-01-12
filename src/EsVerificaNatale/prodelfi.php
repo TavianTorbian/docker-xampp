@@ -15,6 +15,16 @@ if(isset($_SESSION['auth']))
         die("Errore di connessione: " . $connection->connect_error);
     }
 
+    $query = "SELECT * FROM Giocattoli";
+    $result = $connection->query($query);
+
+    if($connection->affected_rows > 0)
+    {
+        echo "";
+    }
+    else{
+        echo "Errore di Visualizzazione!";
+    }
 
     
 }
