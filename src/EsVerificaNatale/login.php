@@ -8,6 +8,6 @@ if($_POST && isset($_POST["username"])&& isset($_POST["password"]))
     if($_POST["username"]=="santa" && $_POST["password"]=="rudolf")
     {
         $_SESSION['auth']=true;
-        header('pannello.php');
+        header('Location: pannello.php');
     }
 }
