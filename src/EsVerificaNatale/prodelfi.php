@@ -20,7 +20,20 @@ if(isset($_SESSION['auth']))
 
     if($connection->affected_rows > 0)
     {
-        echo "";
+        echo "Tabella Utenti contiene: $result->num_rows <br><br>";
+        echo "<table border=1>";
+        echo "<tr>";
+        echo "<th>Username</th>";
+        echo "<th>Password</th>";
+        echo "</tr>";
+        while($row = $result->fetch_assoc())
+        {
+            echo "<tr>";
+            echo "<td>". $row['nome_gioco'] . "</td>";
+            echo  "<td>" . $row['nome_elfo'] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
     }
     else{
         echo "Errore di Visualizzazione!";
