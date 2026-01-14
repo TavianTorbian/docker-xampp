@@ -1,0 +1,37 @@
+Realizzare una semplice applicazione web php+html (css+javascript) che consenta di accedere a 
+delle stanze separate devo gli utenti possano scambiarsi dei messaggi.
+
+Dopo essersi registrati, ed effettuato l'accesso, l'utente deve poter vedere le chatrrom disponibili.
+
+Selezionata una chatroom, l'utente deve poter scruvere messaggi al suo interno e visualizzare i messaggi precedenti,
+riportando la data del messaggio, il testo e il mittente.
+
+Infine, l'utente deve poter creare nuove chatroom.
+
+Extra: prevedere un meccanismo su invito, soltanto l'utente che crea la chatroom e chi ne fa parte 
+possono invitare altri utenti a partecipare.
+Extra:
+utenti
+   |(O,N) 
+  Partecipazione
+   |(1,N)
+stanze
+
+
+entità db: utenti, stanze, messaggi
+
+attributi entità:
+utenti(PK(username), password);
+stanze(PK(Nome));
+messaggi(PK(id), testo, data);
+
+utenti                      
+   |(O,N) 
+  Crea                     
+   |(1,1)
+stanze
+   |(0,N)
+  messaggi
+   |(0,N)
+utenti
+
