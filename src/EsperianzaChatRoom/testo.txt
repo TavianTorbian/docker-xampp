@@ -1,9 +1,9 @@
 Realizzare una semplice applicazione web php+html (css+javascript) che consenta di accedere a 
 delle stanze separate devo gli utenti possano scambiarsi dei messaggi.
 
-Dopo essersi registrati, ed effettuato l'accesso, l'utente deve poter vedere le chatrrom disponibili.
+Dopo essersi registrati, ed effettuato l'accesso, l'utente deve poter vedere le chatroom disponibili.
 
-Selezionata una chatroom, l'utente deve poter scruvere messaggi al suo interno e visualizzare i messaggi precedenti,
+Selezionata una chatroom, l'utente deve poter scrivere messaggi al suo interno e visualizzare i messaggi precedenti,
 riportando la data del messaggio, il testo e il mittente.
 
 Infine, l'utente deve poter creare nuove chatroom.
