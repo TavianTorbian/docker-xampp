@@ -26,6 +26,8 @@
       echo "Login Effettuato! <br>";
       $_SESSION['auth']=true;
       header('Location: Pannello.php');
+    }else {
+      echo "Login non riuscito! <br>";
     }
     
     $connection->close();
