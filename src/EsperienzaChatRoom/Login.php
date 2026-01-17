@@ -16,8 +16,10 @@
     $username=htmlspecialchars($_POST['username']);
     $password=htmlspecialchars($_POST['password']);
     
-    $query = "INSERT INTO ChatRoom(username, password) VALUES('$username', '$password')";
-    $result = $connection->query($query);
+    $stmt = $connection->prepare("INSERT INTO ChatRoom(username, password) VALUES(?, ?)");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result-> num_rows > 0)
     {
