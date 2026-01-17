@@ -15,17 +15,13 @@
     $username=htmlspecialchars($_POST['username']);
     $password=htmlspecialchars($_POST['password']);
     
-    $stmt = $connection->prepare("SELECT * FROM Utenti WHERE username = '$username'");
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $query = "SELECT * FROM utenti WHERE username = '$username'";
+    $result = $connection->query($query);
 
     if($result->num_rows == 0)
     {
-        $stmt = $connection->prepare("INSERT INTO ChatRoom(username, password) VALUES(?, ?)");
-        $stmt->bind_param("ss", $username, $password);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $query = "INSERT INTO utenti(username, password) VALUES('$username','$password')";
+        $result = $connection->query($query);
         $_SESSION['auth']=true;
         header('Location: Pannello.php');
         if ($result-> num_rows > 0)

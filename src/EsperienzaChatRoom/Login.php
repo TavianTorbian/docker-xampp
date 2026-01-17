@@ -16,7 +16,7 @@
     $username=htmlspecialchars($_POST['username']);
     $password=htmlspecialchars($_POST['password']);
     
-    $stmt = $connection->prepare("INSERT INTO ChatRoom(username, password) VALUES(?, ?)");
+    $stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ? AND password = ?");
     $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -24,7 +24,7 @@
     if ($result-> num_rows > 0)
     {
       echo "Login Effettuato! <br>";
-      $_SESSION['auth']=true;
+      $_SESSION['username']=true;
       header('Location: Pannello.php');
     }else {
       echo "Login non riuscito! <br>";
