@@ -22,7 +22,7 @@
     {
         $query = "INSERT INTO utenti(username, password) VALUES('$username','$password')";
         $result = $connection->query($query);
-        $_SESSION['auth']=true;
+        $_SESSION['username']=true;
         header('Location: Pannello.php');
         if ($result-> num_rows > 0)
         {

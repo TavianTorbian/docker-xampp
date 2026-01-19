@@ -23,7 +23,6 @@
 
     if ($result-> num_rows > 0)
     {
-      echo "Login Effettuato! <br>";
       $_SESSION['username']=true;
       header('Location: Pannello.php');
     }else {
