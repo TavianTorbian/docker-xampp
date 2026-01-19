@@ -16,7 +16,7 @@ if ($connection->connect_error) {
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-$stmt = $connection->prepare("SELECT password FROM utenti WHERE username = ?");
+$stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
