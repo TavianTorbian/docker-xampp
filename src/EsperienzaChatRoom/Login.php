@@ -1,41 +1,46 @@
 <?php
-session_start();
+if((isset($_SESSION['auth']) && $_SESSION['auth']==true))
+{
+    session_start();
 
-$host = 'db';
-$dbname = 'ChatRoom';
-$user = 'user';
-$dbpassword = 'user';
-$port = 3306;
+    $host = 'db';
+    $dbname = 'ChatRoom';
+    $user = 'user';
+    $dbpassword = 'user';
+    $port = 3306;
 
-$connection = new mysqli($host, $user, $dbpassword, $dbname, $port);
+    $connection = new mysqli($host, $user, $dbpassword, $dbname, $port);
 
-if ($connection->connect_error) {
-    die("Errore di connessione: " . $connection->connect_error);
-}
-
-$username = $_POST['username'];
-$password = $_POST['password'];
-
-$stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-    $row = $result->fetch_assoc();
-    $hashSalvato = $row['password'];
-
-    if (password_verify($password, $hashSalvato)) {
-        session_regenerate_id(true);
-        $_SESSION['username'] = $username;
-        header("Location: Pannello.php");
-    } else {
-        echo "Password errata!";
+    if ($connection->connect_error) 
+    {
+        die("Errore di connessione: " . $connection->connect_error);
     }
-} else {
-    echo "Utente non trovato!";
-}
 
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) 
+    {
+        $row = $result->fetch_assoc();
+        $hashSalvato = $row['password'];
+
+        if (password_verify($password, $hashSalvato)) {
+            session_regenerate_id(true);
+            $_SESSION['username'] = $username;
+            header("Location: Pannello.php");
+        } else {
+            echo "Password errata!";
+        }
+    } 
+    else 
+    {
+        echo "Utente non trovato!";
+    }
 $connection->close();
-
+}
 ?>

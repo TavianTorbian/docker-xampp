@@ -1,4 +1,6 @@
 <?php
+if((isset($_SESSION['auth']) && $_SESSION['auth']==true))
+{
     $host = 'db'; 
     $dbname = 'ChatRoom'; 
     $user = 'user';
@@ -13,5 +15,9 @@
     }
     
     
+    
     $connection->close();
-    ?>
+}
+?>
+
+    
