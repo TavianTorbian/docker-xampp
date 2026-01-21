@@ -33,7 +33,7 @@
     if ($stmt->execute()) 
     {
         $_SESSION['username'] = $username;
-        header("Location: Pannello.php");
+        header("Location: Pannello.html");
     } 
     else 
     {

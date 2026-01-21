@@ -14,8 +14,6 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
         die("Errore di connessione: " . $connection->connect_error);
     }
     
-
-    
     $connection->close();
 }
 ?>
