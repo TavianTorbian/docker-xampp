@@ -30,7 +30,7 @@
         if (password_verify($password, $hashSalvato)) {
             session_regenerate_id(true);
             $_SESSION['username'] = $username;
-            header("Location: Pannello.html");
+            header("Location: Pannello.php");
         } else {
             echo "Password errata!";
         }
