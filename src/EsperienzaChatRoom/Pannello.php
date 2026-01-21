@@ -1,5 +1,6 @@
 <?php
-if((isset($_SESSION['username']) && $_SESSION['username']==true))
+session_start();
+if(isset($_SESSION['username']))
 {
     $host = 'db'; 
     $dbname = 'ChatRoom'; 
