@@ -26,11 +26,37 @@ if(isset($_SESSION['username']))
     echo '</form>';
     echo '</section>';
     echo '<br><br>';
-    echo '<h3>ChatRoom Disponibili: </h3>';
+    //echo '<h3>ChatRoom Disponibili: </h3>';
     echo '<section>';
     echo '<form method="get" action="Pannello.php">';
     echo '</form>';
     echo '</section>';
+
+    $nome_chat=$_POST['nome'];
+
+    $query1= "INSERT INTO stanze(nome) VALUES ('$nome_chat')";
+    $result1 = $connection->query($query1);
+
+    if ($connection->affected_rows > 0) 
+    {
+        $query = "SELECT nome FROM stanze";
+        $result = $connection->query($query);
+        if ($result->num_rows > 0) 
+        {
+            echo "ChatRoom Disponibili: $result->num_rows <br><br>";
+            echo "<table border=1>";
+            echo "<tr>";
+            echo "<th>Nome ChatRoom</th>";
+            echo "</tr>";
+            while($row = $result->fetch_assoc())
+            {
+                echo "<tr>";
+                echo "<td>". $row['nome'] . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        }
+    }
     
     $connection->close();
 }
