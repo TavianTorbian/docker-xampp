@@ -1,6 +1,4 @@
 <?php
-if((isset($_SESSION['auth']) && $_SESSION['auth']==true))
-{
     session_start();
 
     $host = 'db';
@@ -41,6 +39,6 @@ if((isset($_SESSION['auth']) && $_SESSION['auth']==true))
     {
         echo "Utente non trovato!";
     }
-$connection->close();
-}
+    $connection->close();
+
 ?>

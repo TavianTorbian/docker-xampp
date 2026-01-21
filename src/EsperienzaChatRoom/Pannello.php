@@ -1,5 +1,5 @@
 <?php
-if((isset($_SESSION['auth']) && $_SESSION['auth']==true))
+if((isset($_SESSION['username']) && $_SESSION['username']==true))
 {
     $host = 'db'; 
     $dbname = 'ChatRoom'; 
@@ -14,7 +14,7 @@ if((isset($_SESSION['auth']) && $_SESSION['auth']==true))
         die("Errore di connessione: " . $connection->connect_error);
     }
     
-    
+
     
     $connection->close();
 }
