@@ -53,7 +53,10 @@ if (isset($_GET['visualizza'])) {
     if ($result->num_rows > 0) {
         echo "<h3>ChatRoom disponibili:</h3>";
         echo "<table border='1'>";
-        echo "<tr><th>Nome ChatRoom</th></tr>";
+        echo "<tr>"; 
+        echo "<th>Nome ChatRoom</th>"; 
+        echo "<th>Link ChatRoom</th>"; 
+        echo "</tr>";
 
         while ($row = $result->fetch_assoc()) {
             echo "<tr><td>{$row['nome']}</td></tr>";
