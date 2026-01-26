@@ -36,8 +36,8 @@ if ($connection->connect_error) {
 <?php
 
 if (isset($_POST['crea'])) {
-    $nome_chat = $_POST['nome'];
 
+    $nome_chat= $_POST['nome'];
     $query = "INSERT INTO stanze(nome) VALUES ('$nome_chat')";
     if ($connection->query($query)) {
         echo "<p style='color:green'>ChatRoom creata con successo!</p>";
@@ -59,9 +59,11 @@ if (isset($_GET['visualizza'])) {
         echo "</tr>";
 
         while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>{$row['nome']}</td></tr>";
+            echo '<tr>';
+            echo "<td>". $row['nome'] . "</td>";
+            echo "<td><a href='Chat.php?nome=" . $row['nome'] . "'>Apri chat</a></td>";
+            echo '</tr>';
         }
-
         echo "</table>";
     } else {
         echo "Nessuna ChatRoom disponibile...";
