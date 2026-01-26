@@ -37,7 +37,7 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 
 if(isset($_POST['inserire']))
 {
-
+    
 }
 
 ?>
