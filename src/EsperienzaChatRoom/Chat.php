@@ -31,7 +31,7 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
   </div>
 </div>
 
-<script src="script.js"></script>
+<script src="/js/script.js"></script>
 
 <?php
 
