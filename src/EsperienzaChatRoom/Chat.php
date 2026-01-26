@@ -26,15 +26,12 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
   </div>
 
   <div class="chat-input">
-    <input type="text" id="username" placeholder="Nome utente">
     <input type="text" id="message" placeholder="Scrivi un messaggio">
     <button onclick="sendMessage()">Invia</button>
   </div>
 </div>
 
 <script src="script.js"></script>
-</body>
-</html>
 
 <?php
 

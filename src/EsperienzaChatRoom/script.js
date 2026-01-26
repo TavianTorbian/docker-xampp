@@ -1,5 +1,4 @@
 function sendMessage() {
-    const username = document.getElementById("username").value;
     const message = document.getElementById("message").value;
   
     if (!username || !message) return;
@@ -8,7 +7,7 @@ function sendMessage() {
   
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("message");
-    msgDiv.innerHTML = `<strong>${username}:</strong> ${message}`;
+    msgDiv.innerHTML = `</strong> ${message}`;
   
     chat.appendChild(msgDiv);
     chat.scrollTop = chat.scrollHeight;
