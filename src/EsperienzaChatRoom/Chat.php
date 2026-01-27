@@ -14,7 +14,6 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
         die("Errore di connessione: " . $connection->connect_error);
     }
 
-    $connection->close();
 }
 ?>
 
@@ -37,18 +36,16 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 
 if(isset($_POST['inserire']))
 {
-  $testo = $_POST['text'];
-  $data = date("Y-m-d");
+    $testo = $_POST['text'];
+    $data = date("Y-m-d");
   
-  $query = "INSERT INTO messaggi (testo, data) VALUES ('$testo', '$data')";
-  $result = $connection->query($query);
   
-  if ($connection->affected_rows > 0) {
-      echo "Messaggio inserito correttamente";
-  } else {
-      echo "Errore nell'inserimento del messaggio";
-  }
-
+    if ($connection->affected_rows > 0) {
+      $query = "INSERT INTO messaggi (testo, data) VALUES ('$testo', '$data')";
+      $result = $connection->query($query);
+    } else {
+        echo "Errore nell'inserimento del messaggio";
+    }
 }
-
+$connection->close();
 ?>
