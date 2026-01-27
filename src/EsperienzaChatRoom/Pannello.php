@@ -18,7 +18,7 @@ if ($connection->connect_error) {
 }
 ?>
 
-<h1>Benvenuto nelle ChatRoom!</h1>
+<h1>Benvenuto nella pagina di accesso alle ChatRoom!</h1>
 <h3>Crea una nuova ChatRoom</h3>
 <form method="post" action="Pannello.php">
     <label>Nome ChatRoom:</label><br>
