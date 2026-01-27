@@ -1,4 +1,5 @@
 <?php
+session_start();
 if((isset($_SESSION['username']) && $_SESSION['username']==true))
 {
     $host = 'db'; 
@@ -13,7 +14,6 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
     {
         die("Errore di connessione: " . $connection->connect_error);
     }
-
 }
 ?>
 
@@ -34,18 +34,37 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 
 <?php
 
-if(isset($_POST['inserire']))
-{
-    $testo = $_POST['text'];
-    $data = date("Y-m-d");
-  
-  
-    if ($connection->affected_rows > 0) {
+  $query = "SELECT * FROM messaggi";
+  $result = $connection->query($query);
+
+  if ($result->num_rows > 0) {
+    echo "<h3>ChatRoom disponibili:</h3>";
+    echo "<table border='1'>";
+    echo "<tr>"; 
+    echo "<th>Messaggi Precedenti</th>"; 
+    echo "</tr>";
+
+    while ($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo "<td>". $row['testo'] . "</td>";
+        echo "<td>". $row['data'] . "</td>";
+        echo '</tr>';
+    }
+    echo "</table>";
+
+    if(isset($_POST['inserire'])) 
+    {
+      $testo = $_POST['testo'];
+      $data = date("Y-m-d");
+
       $query = "INSERT INTO messaggi (testo, data) VALUES ('$testo', '$data')";
       $result = $connection->query($query);
-    } else {
+      if ($connection->affected_rows > 0) {
+        echo "Messaggio inserito con successo";
+      } else {
         echo "Errore nell'inserimento del messaggio";
+      }
     }
-}
+  }
 $connection->close();
 ?>
