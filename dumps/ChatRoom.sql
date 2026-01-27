@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Creato il: Gen 14, 2026 alle 12:02
+-- Creato il: Gen 27, 2026 alle 07:35
 -- Versione del server: 11.3.2-MariaDB-1:11.3.2+maria~ubu2204
 -- Versione PHP: 8.2.27
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `messaggi` (
-  `id` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
   `testo` text NOT NULL,
   `data` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -43,6 +43,15 @@ CREATE TABLE `stanze` (
   `nome` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `stanze`
+--
+
+INSERT INTO `stanze` (`nome`) VALUES
+('Chat1'),
+('Chat2'),
+('Chat3');
+
 -- --------------------------------------------------------
 
 --
@@ -51,8 +60,16 @@ CREATE TABLE `stanze` (
 
 CREATE TABLE `utenti` (
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `utenti`
+--
+
+INSERT INTO `utenti` (`username`, `password`) VALUES
+('fede', '$2y$12$QJWguFCnn6XC2eFdgNkPberKM5XbUrBmlucP6CSPiEGc5Iky3obJW'),
+('ion', '$2y$12$VrrchiGcqS24FZvOQzIYHeDV/.ut.kDarI72ZRMAKmvbiB1xCeSzS');
 
 --
 -- Indici per le tabelle scaricate
@@ -65,27 +82,20 @@ ALTER TABLE `messaggi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `stanze`
---
-ALTER TABLE `stanze`
-  ADD PRIMARY KEY (`nome`);
-
---
 -- Indici per le tabelle `utenti`
 --
 ALTER TABLE `utenti`
   ADD PRIMARY KEY (`username`);
 
 --
--- Limiti per le tabelle scaricate
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- Limiti per la tabella `messaggi`
+-- AUTO_INCREMENT per la tabella `messaggi`
 --
 ALTER TABLE `messaggi`
-  ADD CONSTRAINT `fk_messaggi_stanze` FOREIGN KEY (`id`) REFERENCES `stanze` (`nome`),
-  ADD CONSTRAINT `fk_messaggi_utenti` FOREIGN KEY (`id`) REFERENCES `utenti` (`username`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
