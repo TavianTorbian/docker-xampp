@@ -32,12 +32,16 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 <br><br>
 
 <?php
+
   if(isset($_GET ["visualizza"])){
-    $query = "SELECT * FROM messaggi";
+    
+    $id = $_GET['nome']; 
+
+    $query = "SELECT * FROM messaggi GROUP BY id";
     $result = $connection->query($query);
   
     if ($result->num_rows > 0) {
-      echo "<h3>ChatRoom disponibili:</h3>";
+      echo "<h3>Messaggi Precedenti:</h3>";
       echo "<table border='1'>";
       echo "<tr>"; 
       echo "<th>Messaggio</th>"; 
@@ -55,18 +59,19 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 
   if(isset($_POST['inserire'])) 
   {
-    $testo = $_POST['testo'];
-    $data = date("Y-m-d");
+      $id = $_GET['nome']; 
+      $testo =$_POST['testo'];
+      $data = date("Y-m-d");
 
-    $query = "INSERT INTO messaggi (testo, data) VALUES ('$testo', '$data')";
-    $result = $connection->query($query);
-
-    if ($connection->affected_rows > 0) {
-      echo "Messaggio inserito con successo";
-    } else {
-      echo "Errore nell'inserimento del messaggio";
+      $query = "INSERT INTO messaggi (id, testo, data) VALUES ('$id', '$testo', '$data')";
+      $result = $connection->query($query);
+  
+      if ($connection->affected_rows > 0) {
+          echo "<p style='color:green'>Messaggio inserito con successo</p>";
+      } else {
+          echo "<p style='color:red'>Errore nell'inserimento del messaggio</p>";
+      }
     }
-  }
 
 $connection->close();
 ?>
