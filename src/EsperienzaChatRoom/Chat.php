@@ -34,7 +34,7 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 <?php
 
   if(isset($_GET ["visualizza"])){
-    
+
     $id = $_GET['nome']; 
 
     $query = "SELECT * FROM messaggi GROUP BY id";
