@@ -1,6 +1,6 @@
 <?php
 session_start();
-if((isset($_SESSION['username']) && $_SESSION['username']==true))
+if(isset($_SESSION['username']))
 {
     $host = 'db'; 
     $dbname = 'ChatRoom'; 
@@ -14,6 +14,11 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
     {
         die("Errore di connessione: " . $connection->connect_error);
     }
+
+    $nome = $_GET['nome'];
+    $query = "SELECT nome FROM stanze WHERE nome = '$nome'";
+    $result = $connection->query($query);
+
 }
 ?>
 <h1>Benvenuto nella ChatRoom!</h1>
@@ -35,9 +40,7 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
 
   if(isset($_GET ["visualizza"])){
 
-    $id = $_GET['nome']; 
-
-    $query = "SELECT * FROM messaggi GROUP BY id";
+    $query = "SELECT * FROM messaggi WHERE id = '$nome'";
     $result = $connection->query($query);
   
     if ($result->num_rows > 0) {
@@ -56,14 +59,13 @@ if((isset($_SESSION['username']) && $_SESSION['username']==true))
       }
       echo "</table>";
   }}
-
+  
   if(isset($_POST['inserire'])) 
   {
-      $id = $_GET['nome']; 
       $testo =$_POST['testo'];
       $data = date("Y-m-d");
 
-      $query = "INSERT INTO messaggi (id, testo, data) VALUES ('$id', '$testo', '$data')";
+      $query = "INSERT INTO messaggi (id, testo, data) VALUES ('$nome', '$testo', '$data')";
       $result = $connection->query($query);
   
       if ($connection->affected_rows > 0) {

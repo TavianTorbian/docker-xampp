@@ -47,6 +47,7 @@ if (isset($_POST['crea'])) {
 }
 
 if (isset($_GET['visualizza'])) {
+
     $query = "SELECT nome FROM stanze";
     $result = $connection->query($query);
 
