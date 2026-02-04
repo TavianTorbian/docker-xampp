@@ -10,7 +10,7 @@
         $contenuto2=json_decode($contenuto,true);
         var_dump($contenuto2);
 
-        foreach($contenuto2 as $key=>$value){
+        foreach ($contenuto2 as $key => $value){
             var_dump($key);
             var_dump($value);
         }
