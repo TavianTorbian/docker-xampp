@@ -17,6 +17,8 @@ if (isset($_SESSION['username'])) {
     }
 
     $nome = $_GET['nome'] ?? $_POST['nome'] ?? null;
+}else{
+    header("Location: Login.php");
 }
 ?>
 
@@ -39,7 +41,20 @@ if (isset($_SESSION['username'])) {
 
 <?php
 
-if (isset($_GET["visualizza"]) && $nome) {
+    if (isset($_POST['inserire']) && $nome) {
+
+        $testo = $_POST['testo'];
+        $data = date("Y-m-d");
+
+        $query = "INSERT INTO messaggi (id, testo, data) VALUES ('$nome', '$testo', '$data')";
+        $result = $connection->query($query);
+
+        if ($connection->affected_rows > 0) {
+            echo "<p style='color:green'>Messaggio inserito con successo</p>";
+        } else {
+            echo "<p style='color:red'>Errore nell'inserimento del messaggio</p>";
+        }
+    }
 
     $query = "SELECT * FROM messaggi WHERE id = '$nome' ORDER BY data DESC";
     $result = $connection->query($query);
@@ -60,22 +75,6 @@ if (isset($_GET["visualizza"]) && $nome) {
     } else {
         echo "<p>Nessun messaggio presente in questa chat.</p>";
     }
-}
-
-if (isset($_POST['inserire']) && $nome) {
-
-    $testo = $_POST['testo'];
-    $data = date("Y-m-d");
-
-    $query = "INSERT INTO messaggi (id, testo, data) VALUES ('$nome', '$testo', '$data')";
-    $result = $connection->query($query);
-
-    if ($connection->affected_rows > 0) {
-        echo "<p style='color:green'>Messaggio inserito con successo</p>";
-    } else {
-        echo "<p style='color:red'>Errore nell'inserimento del messaggio</p>";
-    }
-}
-
+    
 $connection->close();
 ?>
