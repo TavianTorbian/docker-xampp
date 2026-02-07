@@ -1,6 +1,7 @@
 <?php
     session_start();
-
+if(isset($_SESSION['username']))
+{
     $host = 'db';
     $dbname = 'ChatRoom';
     $user = 'user';
@@ -15,30 +16,35 @@
     
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $conferma_password = $_POST['confermapassword'];
+
+    if ($password != $conferma_password) {
+        echo "Le password non corrispondono!";
+    }else{
+        $stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
     
-    $stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) 
-    {
-        echo "Utente già presente!";
+        if ($result->num_rows > 0) 
+        {
+            echo "Utente già presente!";
+            echo "<br><br>";
+            echo "<a href='Login.html'>Torna al Login!</a>";
+        }else{
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $connection->prepare("INSERT INTO utenti (username, password) VALUES (?, ?)");
+            $stmt->bind_param("ss", $username, $hash);
+        
+            if ($stmt->execute()) 
+            {
+                header("Location: Login.php");
+            }else{
+                echo "Registrazione non effettuata!";
+            }
+        }
     }
-    
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $connection->prepare("INSERT INTO utenti (username, password) VALUES (?, ?)");
-    $stmt->bind_param("ss", $username, $hash);
-    
-    if ($stmt->execute()) 
-    {
-        $_SESSION['username'] = $username;
-        header("Location: Pannello.php");
-    } 
-    else 
-    {
-        echo "Registrazione non effettuata!";
-    }
+}
     
     $connection->close();
 ?>
