@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Creato il: Gen 27, 2026 alle 07:35
+-- Creato il: Feb 07, 2026 alle 11:53
 -- Versione del server: 11.3.2-MariaDB-1:11.3.2+maria~ubu2204
 -- Versione PHP: 8.2.27
 
@@ -28,10 +28,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `messaggi` (
-  `id` int(11) NOT NULL,
+  `id` varchar(50) NOT NULL,
   `testo` text NOT NULL,
   `data` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `messaggi`
+--
+
+INSERT INTO `messaggi` (`id`, `testo`, `data`) VALUES
+('Chat2', 'ciao a tutti', '2026-02-07'),
+('Chat2', 'ciao', '2026-02-07');
 
 -- --------------------------------------------------------
 
@@ -68,8 +76,8 @@ CREATE TABLE `utenti` (
 --
 
 INSERT INTO `utenti` (`username`, `password`) VALUES
-('fede', '$2y$12$QJWguFCnn6XC2eFdgNkPberKM5XbUrBmlucP6CSPiEGc5Iky3obJW'),
-('ion', '$2y$12$VrrchiGcqS24FZvOQzIYHeDV/.ut.kDarI72ZRMAKmvbiB1xCeSzS');
+('fede', '$2y$12$r1MK2T/WZeakpjpcq5RIuuaKhyrEgnndJwMNJ.DE6UnS.Zbbdo8S.'),
+('nicola', '$2y$12$slm81lUnCqrWPRQ0CnOLS.hL1Sr8Yx2.q0tnLcbtGDluXJEmj0tDm');
 
 --
 -- Indici per le tabelle scaricate
@@ -79,23 +87,20 @@ INSERT INTO `utenti` (`username`, `password`) VALUES
 -- Indici per le tabelle `messaggi`
 --
 ALTER TABLE `messaggi`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `id` (`id`);
+
+--
+-- Indici per le tabelle `stanze`
+--
+ALTER TABLE `stanze`
+  ADD PRIMARY KEY (`nome`),
+  ADD KEY `nome` (`nome`);
 
 --
 -- Indici per le tabelle `utenti`
 --
 ALTER TABLE `utenti`
   ADD PRIMARY KEY (`username`);
-
---
--- AUTO_INCREMENT per le tabelle scaricate
---
-
---
--- AUTO_INCREMENT per la tabella `messaggi`
---
-ALTER TABLE `messaggi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
