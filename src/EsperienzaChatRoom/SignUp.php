@@ -1,7 +1,6 @@
 <?php
     session_start();
-if(isset($_SESSION['username']))
-{
+
     $host = 'db';
     $dbname = 'ChatRoom';
     $user = 'user';
@@ -18,9 +17,12 @@ if(isset($_SESSION['username']))
     $password = $_POST['password'];
     $conferma_password = $_POST['confermapassword'];
 
-    if ($password != $conferma_password) {
+    if ($password !== $conferma_password) {
         echo "Le password non corrispondono!";
+        echo "<br><br>";
+        echo "<a href='SignUp.html'>Torna alla Registrazione!</a>";
     }else{
+
         $stmt = $connection->prepare("SELECT * FROM utenti WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -38,13 +40,12 @@ if(isset($_SESSION['username']))
         
             if ($stmt->execute()) 
             {
-                header("Location: Login.php");
+                header("Location: Pannello.php");
             }else{
                 echo "Registrazione non effettuata!";
             }
         }
     }
-}
-    
+
     $connection->close();
 ?>
