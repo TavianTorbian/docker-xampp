@@ -1,0 +1,541 @@
+# Sistema di Gestione Idranti 🚒
+
+<p align="center">
+  <img src="https://github.com/st10611/ProtezioneCivile_5AM/blob/main/FRONTEND/images/logo_home.png" width="25%">
+</p>
+
+## Indice
+- [Introduzione](#introduzione)
+- [Obiettivi del progetto](#obiettivi-del-progetto)
+- [Stakeholder](#stakeholder)
+- [Requisiti](#requisiti)
+  - [Funzionali](#requisiti-funzionali)
+  - [Non funzionali](#requisiti-non-funzionali)
+- [Ipotesi iniziali e funzionalità principali](#ipotesi-iniziali-e-funzionalità-principali)
+- [Architettura e modello dati](#architettura-e-modello-dati)
+  - [Schema concettuale](#schema-concettuale)
+  - [Schema concettuale standard](#schema-concettuale-standard)
+  - [Schema logico esteso](#schema-logico-esteso)
+- [Architettura e caratteristiche tecniche](#architettura-e-caratteristiche-tecniche)
+  - [Architettura client-server](#architettura-client-server)
+  - [Struttura del frontend](#struttura-del-frontend)
+  - [Struttura del backend](#struttura-del-backend)
+- [Sistema di autenticazione](#sistema-di-autenticazione)
+- [Raspberry e sicurezza dell'accesso](#raspberry-e-sicurezza-dell-accesso)
+- [Documentazione delle API](#documentazione-delle-api)
+  - [Endpoint per segnalazioni](#endpoint-per-segnalazioni)
+  - [Endpoint per dispositivi](#endpoint-per-dispositivi)
+  - [Endpoint per utenti](#endpoint-per-utenti)
+  - [Endpoint per sedi](#endpoint-per-sedi)
+  - [Autenticazione](#autenticazione)
+  - [Endpoint per manutenzioni](#endpoint-per-manutenzioni)
+  - [Endpoint per log attività](#endpoint-per-log-attività)
+  - [Endpoint per upload di file](#endpoint-per-upload-di-file)
+  - [Endpoint per località](#endpoint-per-località)
+- [Testing e qualità del codice](#testing-e-qualità-del-codice)
+- [Guida completa all'applicazione Protezione Civile](#guida-completa-allapplicazione-protezione-civile)
+- [Possibili sviluppi](#possibili-sviluppi)
+
+## Introduzione
+
+Il Sistema di Gestione Idranti e Dispositivi di Emergenza è un'applicazione web integrata progettata per supportare le operazioni della Protezione Civile e dei Vigili del Fuoco nel territorio comunale. Il sistema permette la localizzazione precisa, il monitoraggio continuo e la gestione efficiente di dispositivi di emergenza come idranti e defibrillatori, garantendo interventi tempestivi ed efficaci durante le situazioni critiche.
+
+Nel contesto urbano attuale, è fondamentale garantire una gestione efficiente sia delle segnalazioni dei cittadini che delle attività di manutenzione degli idranti, includendo interventi ordinari e straordinari. Il progetto è stato sviluppato con l'obiettivo di migliorare la comunicazione tra cittadini e istituzioni, rendendo più rapido ed efficiente il processo di raccolta delle segnalazioni e di pianificazione degli interventi. La digitalizzazione delle operazioni di manutenzione consente inoltre un migliore controllo qualitativo del servizio, aumentando complessivamente la sicurezza della comunità e l'efficacia degli interventi di emergenza.
+
+## Obiettivi del progetto
+
+Il sistema si propone di raggiungere i seguenti obiettivi principali:
+
+- **Localizzazione rapida dei dispositivi**: identificare con precisione la posizione degli idranti e dei dispositivi di emergenza attraverso coordinate GPS, riducendo significativamente i tempi di ricerca durante le emergenze
+- **Gestione centralizzata ed efficiente**: monitorare e mantenere costantemente aggiornati i dati delle risorse disponibili attraverso una piattaforma unificata che supporta sia interventi pianificati che situazioni d'emergenza
+- **Coinvolgimento attivo della cittadinanza**: permettere la segnalazione tempestiva di problemi o malfunzionamenti attraverso un sistema collaborativo che amplia la copertura del monitoraggio territoriale
+- **Ottimizzazione dei tempi di intervento**: ridurre i tempi di risposta durante le situazioni di emergenza grazie all'accesso immediato alle informazioni critiche sullo stato operativo e la posizione dei dispositivi
+
+## Stakeholder
+
+### Committenti
+- **Vigili del Fuoco**: utilizzatori primari del sistema per la localizzazione rapida degli idranti durante gli interventi di emergenza e per la pianificazione delle operazioni sul territorio.
+- **Protezione Civile**: responsabili della gestione complessiva e manutenzione della rete di dispositivi di emergenza distribuiti sul territorio comunale.
+
+### Utilizzatori finali
+- **Operatori della Protezione Civile e dei Vigili del Fuoco**: personale tecnico specializzato che utilizza quotidianamente il sistema durante le operazioni sul campo.
+- **Amministratori di sistema**: personale tecnico responsabile della gestione del sistema, inclusa la configurazione e il monitoraggio delle prestazioni.
+- **Cittadini**: utenti che possono segnalare problemi e contribuire al monitoraggio diffuso dei dispositivi di emergenza, rappresentando una risorsa preziosa per il controllo del territorio.
+
+## Requisiti
+
+L'analisi dei requisiti è stata condotta attraverso una serie di incontri strutturati con i rappresentanti della Protezione Civile e dei Vigili del Fuoco. Durante questi incontri sono state identificate le necessità operative specifiche e sono stati successivamente classificati i requisiti funzionali e non funzionali del sistema.
+
+### Requisiti funzionali
+- **Gestione degli utenti**: implementazione di un sistema multi-ruolo con autenticazione sicura, profili differenziati (amministratore, operatore, cittadino) e gestione delle autorizzazioni basata sul principio del minimo privilegio
+- **Gestione degli idranti**: catalogazione completa di tutti i dispositivi, comprensiva dei dati tecnici (portata, forma, alimentazione), geolocalizzazione precisa tramite coordinate GPS e storico delle manutenzioni
+- **Sistema di segnalazioni**: interfaccia intuitiva per la creazione, visualizzazione e gestione delle segnalazioni, con possibilità di allegare documenti e immagini, e funzionalità di tracciamento dello stato
+- **Sistema di monitoraggio**: dashboard dedicata per il monitoraggio in tempo reale delle scadenze e delle situazioni critiche
+- **Funzionalità cartografiche**: visualizzazione interattiva degli idranti su mappa digitale, con clustering per la gestione di grandi quantità di dispositivi e filtri avanzati per ricerche specifiche
+
+### Requisiti non funzionali
+- **Usabilità**: interfaccia responsive per diversi dispositivi; design intuitivo che riduce i tempi di apprendimento per i nuovi utenti
+- **Sicurezza**: protezione dei dati sensibili tramite crittografia, sistema di autenticazione robusto e registrazione dettagliata di tutte le operazioni
+- **Performance**: tempi di risposta rapidi per le operazioni standard; gestione efficiente di dataset contenenti migliaia di dispositivi
+- **Manutenibilità**: architettura modulare con separazione delle responsabilità secondo il modello MVC e implementazione di test per garantire la robustezza
+
+Questi requisiti hanno guidato le scelte architetturali e tecnologiche durante l'intero ciclo di sviluppo del progetto, assicurando la realizzazione di un sistema robusto e scalabile in grado di rispondere efficacemente alle esigenze specifiche di tutti gli stakeholder identificati.
+
+## Ipotesi iniziali e funzionalità principali
+
+Sulla base delle richieste del committente, è stata implementata una pagina di login con autenticazione sicura tramite email e password. I profili di accesso sono organizzati in tre categorie: **amministratore**, **operatore** e **cittadino**. 
+
+L'**amministratore** dispone di accesso completo a tutte le funzionalità dell'applicazione, inclusa la gestione degli utenti; l'**operatore** possiede gli stessi permessi dell'amministratore per la gestione dei dispositivi e delle segnalazioni, ad eccezione della gestione degli utenti; il **cittadino** può visualizzare la mappa ed effettuare segnalazioni.
+
+È stata implementata una **mappa interattiva** che visualizza la posizione di tutti gli idranti sul territorio. Attraverso questa interfaccia è possibile consultare le informazioni tecniche di ciascun idrante e, in base al ruolo dell'utente, inviare segnalazioni o modificare i dati. Questa soluzione consente di ottimizzare i tempi di intervento durante le emergenze e di facilitare la gestione delle risorse territoriali.
+
+Per la gestione delle **segnalazioni**, il sistema richiede all'utente di fornire una **descrizione dettagliata del problema** e di allegare una **fotografia dell'idrante** interessato. Questo approccio garantisce maggiore precisione nella raccolta delle informazioni e facilita la valutazione e risoluzione delle problematiche segnalate dai cittadini.
+
+## Architettura e modello dati
+
+### Schema concettuale
+
+![Schema Concettuale](https://github.com/st10611/ProtezioneCivile_5AM/blob/main/FRONTEND/images/ER_Protezione-Civile-V2(metodo-Arcangeli).jpg)
+
+### Schema concettuale standard
+
+![Schema Concettuale Standard](https://github.com/st10611/ProtezioneCivile_5AM/blob/main/FRONTEND/images/ER_Protezione-Civile-V3(metodo-Romagnoli).jpg)
+
+### Schema logico esteso
+
+#### UTENTI
+| Attributo     | Tipo      | Dimensione | Chiave  | Valori                                | Note/Descrizione                              |
+|---------------|-----------|------------|---------|---------------------------------------|-----------------------------------------------|
+| ID            | INT       | /          | PK      | /                                     | AUTO_INCREMENT                                |
+| Nome          | varchar   | 64         | /       | /                                     | NOT NULL                                      |
+| Cognome       | varchar   | 64         | /       | /                                     | NOT NULL                                      |
+| DataNascita   | DATE      | /          | /       | /                                     | NOT NULL                                      |
+| Email         | varchar   | 64         | /       | /                                     | UNIQUE, NOT NULL                              |
+| Username      | varchar   | 64         | /       | /                                     | UNIQUE, NOT NULL                              |
+| PasswordHash  | varchar   | 256        | /       | /                                     | NOT NULL                                      |
+| Ruolo         | ENUM      | /          | /       | 'Cittadino', 'Admin', 'Operatore'     | NOT NULL                                      |
+| Punteggio     | INT       | /          | /       | /                                     | /                                             |
+
+#### LOCALITA
+| Attributo     | Tipo      | Dimensione | Chiave  | Valori      | Note/Descrizione |
+|---------------|-----------|------------|---------|-------------|------------------|
+| ID            | INT       | /          | PK      | /           | AUTO_INCREMENT   |
+| CAP           | INT       | /          | /       | /           | NOT NULL         |
+| NomeCitta     | varchar   | 64         | /       | /           | NOT NULL         |
+
+#### DISPOSITIVI
+| Attributo     | Tipo      | Dimensione | Chiave  | Valori                          | Note/Descrizione                                |
+|---------------|-----------|------------|---------|---------------------------------|-------------------------------------------------|
+| ID            | INT       | /          | PK      | /                               | AUTO_INCREMENT                                  |
+| Tipo          | ENUM      | /          | /       | 'Idrante', 'Defibrillatore'     | NOT NULL                                        |
+| Forma         | ENUM      | /          | /       | 'Interrato', 'Fuori terra'      | /                                               |
+| Portata       | ENUM      | /          | /       | '120', '240', '240+'            | /                                               |
+| Alimentazione | ENUM      | /          | /       | 'Serbatoio', 'Acquedotto'       | /                                               |
+| GPS           | POINT     | /          | UNIQUE  | /                               | NOT NULL                                        |
+| Accessibilita | ENUM      | /          | /       | 'Pedonale', 'Auto', 'Autocarro' | /                                               |
+| Localita      | INT       | /          | /       | /                               | FK -> LOCALITA(ID), NOT NULL                    |
+| Stato         | ENUM      | /          | /       | 'disp', 'non disp'              | NOT NULL                                        |
+
+
+#### LOG
+| Attributo     | Tipo      | Dimensione | Chiave | Valori                                   | Note/Descrizione                                |
+|---------------|-----------|------------|--------|------------------------------------------|-------------------------------------------------|
+| Utente        | INT       | /          | FK     | /                                        | FK -> UTENTI(ID)                                |
+| Dispositivo   | INT       | /          | FK     | /                                        | FK -> DISPOSITIVI(ID)                           |
+| Data          | DATE      | /          | /      | /                                        | DEFAULT CURRENT_TIMESTAMP                       |
+| op            | ENUM      | /          | /      | 'Inserimento', 'Cancellazione', 'Update' | NOT NULL                                        |
+
+#### BOCCHETTE
+| Attributo           | Tipo      | Dimensione | Chiave | Valori                 | Note/Descrizione                  |
+|---------------------|-----------|------------|--------|------------------------|-----------------------------------|
+| ID                  | INT       | /          | PK     | /                      | AUTO_INCREMENT                    |
+| DimensioneBocchetta | ENUM      | /          | /      | 'UNI 45mm', 'UNI 70mm' | /                                 |
+
+#### Bocchette_Dispositivi (Tabella di raccordo Many-to-Many)
+| Attributo   | Tipo     | Dimensione | Chiave | Valori       | Note/Descrizione                                  |
+|-------------|----------|------------|--------|--------------|---------------------------------------------------|
+| ID          | INT      | /          | PK     | /            | AUTO_INCREMENT                                    |
+| boc         | INT      | /          | FK     | /            | FK -> BOCCHETTA(ID), NOT NULL                     |
+| disp        | INT      | /          | FK     | /            | FK -> DISPOSITIVI(ID), NOT NULL                   |
+|             |          |            | UNIQUE | (boc, disp)  | Evita duplicati della stessa coppia               |
+
+#### SEDI
+| Attributo   | Tipo     | Dimensione | Chiave | Valori      | Note/Descrizione                                    |
+|-------------|----------|------------|--------|-------------|-----------------------------------------------------|
+| ID          | INT      | /          | PK     | /           | AUTO_INCREMENT                                      |
+| NomeSede    | varchar  | 64         | /      | /           | NOT NULL                                            |
+| Localita    | INT      | /          | FK     | /           | FK -> LOCALITA(ID), NOT NULL                        |
+| Via         | varchar  | 64         | /      | /           | NOT NULL                                            |
+| NCivico     | varchar  | 10         | /      | /           | NOT NULL                                            |
+| Admin       | INT      | /          | FK     | /           | FK -> UTENTI(ID), NOT NULL (Vincolo: Ruolo='Admin') |
+
+#### SEGNALAZIONI
+| Attributo       | Tipo     | Dimensione | Chiave | Valori      | Note/Descrizione                                  |
+|-----------------|----------|------------|--------|-------------|---------------------------------------------------|
+| ID              | INT      | /          | PK     | /           | AUTO_INCREMENT                                    |
+| Descrizione     | TEXT     | /          | /      | /           | NOT NULL                                          |
+| Punteggio       | INT      | /          | /      | /           | NOT NULL                                          |
+| DataSegnalazione| DATE     | /          | /      | /           | NOT NULL, DEFAULT CURRENT_DATE                    |
+| Utente          | INT      | /          | FK     | /           | FK -> UTENTI(ID), NOT NULL                        |
+| Dispositivo     | INT      | /          | FK     | /           | FK -> DISPOSITIVI(ID), NOT NULL                   |
+
+#### MANUTENZIONE
+| Attributo       | Tipo     | Dimensione | Chiave | Valori                                            | Note/Descrizione                                              |
+|-----------------|----------|------------|--------|---------------------------------------------------|---------------------------------------------------------------|
+| ID              | INT      | /          | PK     | /                                                 | AUTO_INCREMENT                                                |
+| Descrizione     | TEXT     | /          | /      | /                                                 | Descrizione intervento                                        |
+| Operatore       | INT      | /          | FK     | /                                                 | FK -> UTENTI(ID), NOT NULL (Vincolo: Ruolo='Operatore')       |
+| Dispositivo     | INT      | /          | FK     | /                                                 | FK -> DISPOSITIVI(ID), NOT NULL                               |
+| Segnalazione    | INT      | /          | FK     | /                                                 | FK -> SEGNALAZIONI(ID), NOT NULL (Origine della manutenzione) |
+| Stato           | ENUM     | /          | /      | 'In attesa', 'In lavorazione', 'Completata'       | NOT NULL                                                      |
+| Data_Inizio     | DATETIME | /          | /      | /                                                 | DEFAULT CURRENT_TIMESTAMP                                     |
+| Data_Fine       | DATETIME | /          | /      | /                                                 | NULL finché lo stato è corrente                               |
+
+#### FOTO
+| Attributo     | Tipo     | Dimensione | Chiave | Valori      | Note/Descrizione                                  |
+|---------------|----------|------------|--------|-------------|---------------------------------------------------|
+| ID            | INT      | /          | PK     | /           | AUTO_INCREMENT                                    |
+| Percorso      | varchar  | 256        | /      | /           | Path del file sul server/storage, NOT NULL        |
+| Dispositivo   | INT      | /          | FK     | /           | FK -> DISPOSITIVI(ID)                             |
+| Segnalazione  | INT      | /          | FK     | /           | FK -> SEGNALAZIONI(ID)                            |
+
+## Architettura e caratteristiche tecniche
+
+L'applicazione si basa su un'architettura **client-server**, in cui un dispositivo client (browser web) invia richieste a un server dedicato, che le elabora e restituisce una risposta.
+
+È stata scelta la realizzazione di una web application per i seguenti motivi:
+- **Accessibilità immediata**: gli utenti possono accedere direttamente dal browser, senza dover scaricare l'app da uno store
+- **Compatibilità multi-piattaforma**: una sola versione del codice funziona su tutti i dispositivi e sistemi operativi
+- **Aggiornamenti automatici**: l'utente visualizza sempre l'ultima versione semplicemente ricaricando la pagina
+- **Costi ridotti**: sviluppare un'unica applicazione significa meno ore di sviluppo e manutenzione nel tempo
+
+L'applicazione segue un'architettura a tre livelli utilizzando il pattern MVC (Model-View-Controller):
+- **Model**: gestisce i dati e la logica di business. È rappresentato dal DBMS MySQL che, tramite stored procedure, semplifica l'esecuzione delle query. Il database contiene anche 3 trigger che si attivano automaticamente in seguito a eventi specifici (es. inserimento di un dispositivo).
+- **View**: gestisce la presentazione dei dati all'utente attraverso l'interfaccia grafica. È implementata usando Bootstrap per le componenti UI e JavaScript per l'interattività.
+- **Controller**: fa da ponte tra utente, Vista e Modello, traducendo le azioni dell'utente in operazioni sui dati. È implementato tramite API REST che permettono comunicazione efficiente tra frontend e backend e future espansioni senza modifiche radicali.
+
+Particolare attenzione è stata dedicata alla sicurezza informatica, implementando crittografia per le password e tecniche per prevenire vulnerabilità come SQL injection. Per l'autenticazione si utilizzano token JWT che garantiscono sessioni sicure e una gestione efficace delle autorizzazioni.
+
+#### Strumenti di sviluppo utilizzati
+- **Git**: sistema di controllo versione per la gestione collaborativa del codice
+- **Visual Studio Code**: ambiente di sviluppo principale
+- **Postman**: strumento per testare e documentare le API
+
+### Architettura client-server
+
+Il progetto si basa su un'architettura client-server implementata su sistema operativo Linux, scelto per la sua stabilità, sicurezza, leggerezza e diffusione in ambito server. L'architettura prevede una chiara separazione tra frontend e backend:
+
+- **Livello frontend (client)**:
+  - Gestisce l'interfaccia utente e l'interazione con l'utente.
+  - Implementa la logica di presentazione e la validazione lato client.
+  - Comunica con il backend tramite chiamate Fetch API.
+
+- **Livello backend (server)**:
+  - Espone API RESTful per le operazioni CRUD.
+  - Gestisce l'accesso al database e la logica di business.
+  - Implementa la sicurezza e l'autenticazione.
+
+### Struttura del frontend
+L'interfaccia utente è sviluppata utilizzando:
+- **HTML5**: definisce la struttura delle pagine web
+- **CSS3**: definisce lo stile e il layout dell'interfaccia
+- **JavaScript ES6+**: garantisce l'interattività e la dinamicità dell'interfaccia
+- **Bootstrap 5**: framework CSS per la realizzazione dell'interfaccia grafica responsive
+
+Il frontend è organizzato in modo modulare con separazione delle responsabilità:
+
+#### Pagine principali
+- **paginaPrincipale.html**: Homepage con la mappa interattiva degli idranti
+- **paginaSegnalazioni.html**: Interfaccia per creare e gestire le segnalazioni
+- **paginaLogin.html**: Form di autenticazione
+- **paginaRegistrazione.html**: Form di registrazione per nuovi utenti
+- **paginaDiGestione.html**: Dashboard amministrativa (accesso basato su ruolo)
+
+#### Organizzazione JavaScript
+L'applicazione segue un approccio modulare con script specializzati:
+
+- **config.js**: Centralizza le configurazioni dell'applicazione (URL API, ruoli utente, configurazioni mappa)
+- **utils.js**: Libreria di funzioni di utilità riutilizzabili (autenticazione, chiamate API, utility comuni)
+- **AppUI.js**: Gestisce elementi comuni dell'interfaccia come navbar, notifiche e navigazione
+- **gestioneMappa.js**: Implementa le funzionalità della mappa interattiva (marker, clustering, popup)
+- **segnalazioni.js**: Logica per la creazione e gestione delle segnalazioni
+- **login.js** e **registrazione.js**: Gestiscono autenticazione e registrazione
+- **gestioneAmministrazione.js**: Funzionalità CRUD per le interfacce amministrative
+
+#### Sistema di memorizzazione
+
+**sessionStorage**: utilizzato per memorizzare le informazioni della sessione utente (token di autenticazione, ruolo utente). Questo garantisce sicurezza e isolamento tra sessioni, permettendo una visualizzazione dinamica dell'interfaccia in base al ruolo e regolando l'accesso alle funzionalità riservate.
+
+**localStorage**: utilizzato per memorizzare i dati geografici (posizione utente, indirizzi degli idranti già consultati), riducendo le richieste ai servizi esterni e migliorando i tempi di caricamento della mappa.
+
+#### Stili e componenti
+- **style.css**: Stylesheet principale che definisce l'aspetto dell'applicazione
+- Utilizzo di Bootstrap per layout responsive e componenti UI
+- Personalizzazione di elementi come modali, navbar, form e tabelle per un'esperienza utente consistente e professionale
+
+### Struttura del backend
+
+Il backend dell'applicazione è implementato con:
+- **PHP**: permette la gestione delle operazioni logiche e l'interazione con il database MySQL.
+- **MySQL**: sistema di gestione del database relazionale.
+
+Il backend è organizzato secondo un'architettura API RESTful, strutturata in endpoint specifici che gestiscono le diverse funzionalità dell'applicazione:
+
+#### Organizzazione dei file
+- **File di configurazione**: `config.php` gestisce la connessione al database e le impostazioni globali.
+- **Middleware di autenticazione**: `verificaToken.php` verifica l'autenticità dei token JWT in ogni richiesta protetta.
+- **API endpoint**: file PHP separati per ciascuna operazione CRUD sulle diverse entità.
+
+#### Organizzazione PHP
+Ogni endpoint API segue un pattern comune:
+1. **Configurazione header HTTP**: impostazione dei header CORS e tipo di contenuto.
+2. **Validazione del metodo HTTP**: verifica che la richiesta utilizzi il metodo corretto (GET, POST, PUT, DELETE).
+3. **Autenticazione** (dove necessario): verifica del token JWT tramite middleware.
+4. **Validazione input**: controllo della presenza e validità dei parametri richiesti.
+5. **Interazione con il database**: utilizzo di prepared statements per prevenire SQL injection.
+6. **Risposta formattata**: restituzione dei dati in formato JSON con indicatori di successo o errore.
+
+#### Sicurezza implementata
+- **Prevenzione SQL Injection**: utilizzo sistematico di prepared statements
+- **Controllo degli accessi**: verifica del ruolo utente prima di consentire operazioni privilegiate
+- **Validazione input**: controllo completo dei parametri per prevenire dati malformati
+- **Gestione errori**: cattura e gestione delle eccezioni con messaggi appropriati
+
+Questa architettura modulare facilita la manutenzione e l'estensione dell'applicazione, permettendo di aggiungere nuove funzionalità con impatto minimo sul codice esistente e garantendo la stabilità del sistema nel lungo termine.
+
+## Sistema di autenticazione
+
+Il sistema implementa un'autenticazione basata su token JWT (JSON Web Token) per garantire un accesso sicuro e scalabile all'applicazione. Questo sistema evita la necessità di mantenere sessioni attive lato server e consente un controllo granulare dell'accesso alle API.
+
+### Processo di autenticazione
+
+1. L'utente fornisce le credenziali (email e password) tramite l'interfaccia di login.
+2. Il backend verifica le credenziali confrontando l'hash della password e genera un JWT contenente:
+   - Email dell'utente
+   - Ruolo (Amministratore, Operatore, Cittadino)
+   - Username
+   - Timestamp di scadenza
+3. Il client memorizza il token nel sessionStorage e lo include nelle intestazioni di ogni richiesta API.
+
+### API di verifica del token
+
+Per garantire che solo utenti autenticati possano accedere agli endpoint protetti, è stata sviluppata un'API middleware di verifica. Il sistema:
+1. Estrae il token dall'intestazione Authorization
+2. Decodifica e valida il token usando la chiave segreta
+3. Verifica che il token non sia scaduto e che i dati siano validi
+4. In caso di validità, consente l'accesso; altrimenti restituisce errore 401 Unauthorized
+
+Questo sistema consente di separare l'autenticazione dall'autorizzazione e permette di scalare l'applicazione in ambienti distribuiti senza condividere stato di sessione tra componenti.
+
+### Misure di sicurezza
+
+Per garantire la massima sicurezza, il sistema implementa:
+- Verifica sistematica dei token per ogni richiesta
+- Scadenza automatica dei token (1 ora)
+- Prevenzione contro SQL injection e altre vulnerabilità
+- Hashing delle password con algoritmi sicuri (bcrypt)
+
+## Raspberry e sicurezza dell'accesso
+
+Il progetto è stato implementato utilizzando un **Raspberry Pi 4** come server di sviluppo. Sul Raspberry Pi è stato installato tutto il software necessario: web server Apache, DBMS MySQL e interprete PHP.
+
+### Configurazione della sicurezza di rete
+
+Per consentire la gestione remota sicura e l'accesso protetto all'applicazione, sono state configurate le seguenti porte:
+- **Porta 22 (SSH)**: per il collegamento remoto sicuro per manutenzione e configurazione
+- **Porta 443 (HTTPS)**: per l'accesso sicuro e crittografato al sito web
+
+Per proteggere le comunicazioni tra utente e server, è stato implementato un certificato SSL utilizzando Let's Encrypt, che fornisce certificati gratuiti validi per 90 giorni con rinnovo automatico.
+
+1. **Installazione di Certbot**
+   ```bash
+   sudo apt update
+   sudo apt install certbot python3-certbot-apache
+   ```
+
+2. **Ottenimento del certificato SSL**
+   ```bash
+   sudo certbot --apache
+   ```
+   - Accettare i termini di servizio
+   - Scegliere il reindirizzamento automatico da HTTP a HTTPS
+
+3. **Verifica dei certificati**
+   I file vengono memorizzati in:
+   ```bash
+   /etc/letsencrypt/live/g0ptrkwkej5fhqfl.myfritz.net/
+   ```
+   - `fullchain.pem`: certificato completo
+   - `privkey.pem`: chiave privata
+
+4. **Test del rinnovo automatico**
+   ```bash
+   sudo certbot renew --dry-run
+   ```
+
+Questa configurazione garantisce che tutte le comunicazioni tra client e server siano crittografate e protette, prevenendo intercettazioni di dati sensibili e attacchi man-in-the-middle.
+
+## Documentazione delle API
+
+### Note Generali
+La maggior parte degli endpoint API include intestazioni CORS per consentire l'autorizzazione nelle risposte API.
+
+### Endpoint per Segnalazioni
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getSegnalazioni.php?località={filtro_località}` | `filtro_località`: Filtro per località | Recupera tutte le segnalazioni filtrate per località |
+| GET    | `/getSegnalazioniCap.php?cap={CAP}` | `cap`: Codice di avviamento postale | Recupera segnalazioni filtrate per CAP |
+| POST   | `/addSegnalazione.php` | - `descrizione`<br>- `utente`<br>- `dispositivo`<br>- `dataSegnalazione` | Aggiunge una nuova segnalazione (con CORS headers) |
+| PUT    | `/updateSegnalazione.php?id={ID}` | - `idSegnalazione`<br>- `descrizione`<br>- `utente`<br>- `dispositivo`<br>- `dataSegnalazione` | Aggiorna una segnalazione esistente tramite ID |
+| DELETE | `/deleteSegnalazione.php?id={ID}` | `idSegnalazione` | Elimina una segnalazione tramite ID |
+| GET    | `/getFotoSegnalazione.php?id={ID}` | `idSegnalazione` | Recupera le foto di una segnalazione tramite ID |
+| DELETE | `/DeleteFotoSegnalazione.php?id={ID}` | `idFotoSegnalazione` | Elimina una foto di segnalazione tramite ID |
+
+### Endpoint per Dispositivi
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getDispositivi.php` | Nessuno | Recupera tutti i dispositivi con annesse stored procedure e viste |
+| GET    | `/getDispositivi.php?id={filtro_ID}` | `filtro_ID`: Filtro per ID dispositivo | Recupera dispositivi filtrati per ID |
+| GET    | `/getDispositivi.php?località={filtro_località}` | `filtro_località`: Filtro per codice postale | Recupera dispositivi filtrati per codice postale |
+| POST   | `/addDispositivo.php` | - `tipo`<br>- `descrizione`<br>- `dimensione_bocchetta`<br>- `forma`<br>- `portata`<br>- `alimentazione`<br>- `gps`<br>- `accessibilità`<br>- `indirizzo` | Aggiunge un nuovo dispositivo con stored procedure |
+| POST   | `/addDispositivoBocchetta.php` | - `tipo`<br>- `descrizione`<br>- `dimensione_bocchetta`<br>- `forma`<br>- `portata`<br>- `alimentazione`<br>- `gps`<br>- `accessibilità`<br>- `indirizzo` | Aggiunge un nuovo dispositivo con bocchetta (include CORS headers) |
+| PUT    | `/updateDispositivo.php?id={ID}` | - `idDispositivo`<br>- Tutti i campi del POST | Aggiorna un dispositivo esistente tramite ID |
+| DELETE | `/deleteDispositivo.php?id={ID}` | `idDispositivo` | Elimina un dispositivo tramite ID |
+| GET    | `/getFotoDispositivo.php?id={ID}` | `idDispositivo` | Recupera le foto di un dispositivo tramite ID (include CORS headers) |
+| DELETE | `/deleteFoto.php?id={ID}` | `idFoto` | Elimina una foto tramite ID (include CORS headers) |
+| GET    | `/GetDispositivoCAP.php?cap={CAP}` | `cap`: Codice di avviamento postale | Recupera dispositivi filtrati per CAP con stored procedure e viste |
+| GET    | `/GetDispositivoID.php?id={ID}` | `id`: ID del dispositivo | Recupera un dispositivo specifico tramite ID con stored procedure e viste |
+| GET    | `/getNumDispositivo.php` | Nessuno | Recupera il numero totale di dispositivi (include CORS headers) |
+| GET    | `/getManutenzioniDispositivo.php?id={ID}` | `idDispositivo` | Recupera le manutenzioni di un dispositivo tramite ID |
+
+### Endpoint per Utenti
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getUtenti.php` | Nessuno | Recupera tutti gli utenti (include CORS headers) |
+| POST   | `/addUtenti.php` | - `nome`<br>- `cognome`<br>- `dataNascita`<br>- `password`<br>- `ruolo`<br>- `username` | Aggiunge un nuovo utente senza verifica token |
+| PUT    | `/updateUtente.php?id={ID}` | - `idUtente`<br>- Tutti i campi del POST | Aggiorna un utente esistente tramite ID (include CORS headers) |
+| DELETE | `/deleteUtente.php?id={ID}` | `idUtente` | Elimina un utente tramite ID (include CORS headers) |
+
+### Endpoint per Sedi
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getSedi.php` | Nessuno | Recupera tutte le sedi |
+| POST   | `/addSedi.php` | - `nome`<br>- `indirizzo`<br>- `località`<br>- `cap` | Aggiunge una nuova sede |
+| PUT    | `/updateSede.php?id={ID}` | - `idSede`<br>- Tutti i campi del POST | Aggiorna una sede esistente tramite ID |
+| DELETE | `/deleteSede.php?id={ID}` | `idSede` | Elimina una sede tramite ID |
+
+### Autenticazione
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| POST   | `/login.php` | - `username`<br>- `password` | Esegue il login dell'utente (include CORS headers) |
+| GET    | `/verificaToken.php` | - `token` | Verifica la validità di un token di autenticazione (include CORS headers per JSON) |
+| GET    | `/config.php` | Nessuno | Impostazioni del file auth.php e login |
+
+### Endpoint per Manutenzioni
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getManutenzioni.php` | Nessuno | Recupera tutte le manutenzioni |
+| GET    | `/getManutenzioniDispositivo.php?id={ID}` | `idDispositivo` | Recupera le manutenzioni di un dispositivo tramite ID |
+| GET    | `/getManutenzioniSegnalazioni.php?id={ID}` | `idSegnalazione` | Recupera le manutenzioni relative a una segnalazione tramite ID |
+| POST   | `/addManutenzione.php` | - `descrizione`<br>- `dispositivo`<br>- `dataManutenzione`<br>- Altri parametri | Aggiunge una nuova manutenzione |
+| PUT    | `/updateManutenzione.php?id={ID}` | - `idManutenzione`<br>- Altri parametri | Aggiorna una manutenzione esistente tramite ID |
+
+### Endpoint per Log Attività
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getLog.php` | Nessuno | Recupera tutte le attività di log del sistema |
+
+### Endpoint per Upload di File
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| POST   | `/uploadFoto.php` | - `file`<br>- `riferimento`<br>- `tipo` | Carica una foto nel sistema (include CORS headers) |
+
+### Endpoint per Località
+
+| Metodo | Endpoint | Parametri | Descrizione |
+|--------|----------|-----------|-------------|
+| GET    | `/getAllLocalita.php` | Nessuno | Recupera tutte le località disponibili (include CORS headers) |
+| GET    | `/getLocalita.php?id={ID}` | `idLocalità` | Recupera una località tramite ID |
+| GET    | `/getLocalitaID.php?id={ID}` | `idLocalità` | Recupera una località tramite ID (versione ottimizzata) |
+
+
+
+
+## Testing e qualità del codice
+
+Per garantire l'affidabilità e la sicurezza dell'applicazione, sono state implementate le seguenti pratiche:
+- **Test funzionali**: verifica del corretto funzionamento di ogni API e componente dell'interfaccia
+- **Test di sicurezza**: controlli per identificare vulnerabilità nell'autenticazione e gestione dei dati
+- **Test di compatibilità**: verifica del funzionamento su diversi browser (Chrome, Firefox, Safari, Edge) e dispositivi per garantire un'esperienza utente consistente
+- **Validazione manuale**: revisione del codice e test manuali per individuare errori e ottimizzare le performance
+
+## Guida completa all'applicazione Protezione Civile
+
+### 1. Navigazione principale
+
+La **barra di navigazione** (navbar) posizionata nella parte superiore dell'interfaccia è sempre visibile durante la navigazione e permette di accedere rapidamente alle sezioni principali dell'applicazione attraverso un'interfaccia intuitiva e responsive.
+
+| Sezione              | Descrizione dettagliata                                                                 |
+|----------------------|-----------------------------------------------------------------------------------------|
+| 🚨 **Segnalazioni**   | Interfaccia per visualizzare tutte le segnalazioni esistenti o creare nuove segnalazioni relative a problemi degli idranti o altri dispositivi di emergenza presenti sul territorio |
+| 🗃️ **Gestione**       | Area amministrativa completa per gestire in modo professionale idranti, utenti registrati e segnalazioni (sezione accessibile esclusivamente a operatori qualificati e amministratori) |
+| 🔐 **Login**          | Pagina di accesso sicuro al sistema attraverso l'inserimento delle proprie credenziali personali (email e password) |
+| 🔓 **Logout**         | Funzione per terminare in modo sicuro la sessione corrente ed uscire completamente dal sistema, garantendo la protezione dei dati |
+| ℹ️ **Guida**          | Accesso diretto a questa documentazione completa e dettagliata sull'utilizzo di tutte le funzionalità dell'applicazione |
+| 🔍 **Barra di ricerca** | Strumento avanzato per cercare rapidamente idranti specifici inserendo qualsiasi informazione rilevante: indirizzo completo, località, via, codice postale (CAP), città, ecc. (disponibile esclusivamente nella pagina principale) |
+
+### 2. Sistema di ruoli e permessi
+
+Il sistema implementa un controllo degli accessi basato su ruoli gerarchici, garantendo che ogni utente possa accedere esclusivamente alle funzionalità appropriate al proprio livello di autorizzazione:
+
+| Ruolo         | Permessi e autorizzazioni specifiche |
+|---------------|---------------------------------------|
+| **Cittadino** | - Può creare e inviare nuove segnalazioni.<br>- Può visualizzare liberamente la mappa interattiva degli idranti.<br>- **Non dispone** di autorizzazioni per modificare o eliminare dati esistenti nel sistema. |
+| **Operatore** | - Può gestire idranti, dispositivi e segnalazioni.<br>- Può modificare, aggiornare o eliminare dispositivi e segnalazioni secondo necessità operative.<br>- **Non dispone** di autorizzazioni per la gestione degli account utente. |
+| **Amministratore** | - Accesso completo e illimitato: gestione di idranti, segnalazioni e utenti.<br>- Può configurare tutti gli aspetti del sistema e gestire gli account di tutti gli utenti. |
+
+### 3. Funzionalità principali del sistema
+
+#### A. Processo di login e registrazione
+- **Registrazione**: compilare il modulo con email, username, password, nome, cognome e data di nascita. Dopo la registrazione, l'utente viene automaticamente autenticato.
+- **Login**: inserire email e password. Il sistema mostra le sezioni disponibili in base al ruolo dell'utente.
+
+#### B. Mappa interattiva degli idranti
+- Visualizza tutti gli idranti attraverso una **mappa interattiva** basata su GPS.
+- **Ricerca**: utilizza la barra di ricerca per trovare idranti inserendo via, città, CAP, ecc.
+- **Popup informativo**: cliccando su un idrante si apre un popup con:
+  - Tipologia del dispositivo
+  - Portata operativa
+  - Stato di funzionamento
+  - Località e indirizzo completo
+- **Aggiunta idrante** (operatori/amministratori): doppio clic sulla mappa → compilare il form → confermare
+- **Gestione idrante** (operatori/amministratori): dal popup è possibile eliminare o gestire l'idrante
+
+#### C. Sistema di gestione segnalazioni
+- **Visualizzazione**: elenco completo con dettagli (descrizione, punteggio, data, utente, dispositivo)
+- **Creazione**: dal popup idranti o dalla sezione segnalazioni → compilare il modulo → allegare foto → inviare
+- **Gestione** (operatori/amministratori): eliminazione o modifica tramite interfaccia tabellare
+
+#### D. Pannello di gestione (operatori/amministratori)
+Organizzato in quattro schede:
+- **Segnalazioni**: visualizzazione, eliminazione e modifica di tutte le segnalazioni
+- **Utenti** (solo amministratori): gestione degli account utente
+- **Dispositivi**: gestione di tutti gli idranti/dispositivi
+- **Log**: monitoraggio di tutte le operazioni per garantire tracciabilità
+
+## Possibili sviluppi futuri
+
+Il progetto è stato progettato con un'architettura modulare per crescere nel tempo. Possibili sviluppi futuri:
+
+1. **Intelligenza artificiale**: integrazione di un chatbot per assistenza automatizzata e classificazione delle segnalazioni
+2. **Espansione territoriale**: adozione da parte di comuni limitrofi per creare una rete territoriale integrata
+3. **Sistema di notifiche**: implementazione di notifiche push per comunicazioni urgenti
+4. **Analytics avanzate**: dashboard per analisi statistica dei dati e generazione di report periodici
