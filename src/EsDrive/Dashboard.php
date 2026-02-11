@@ -36,7 +36,10 @@ if (isset($_SESSION['email'])) {
 if (isset($_POST['upload'])) {
 
     $nome= $_POST['nome'];
-    $query = "INSERT INTO Documenti(nome) VALUES ('$nome')";
+    $data = $_POST['CURDATE()'];
+    $file = $_FILES['file']['tmp_name'];
+
+    $query = "INSERT INTO Documenti(nome, data, content) VALUES ('$nome', '$data', '$file')";
     if ($connection->query($query)) {
         echo "<p style='color:green'>File caricato con successo!</p>";
     } else {
@@ -46,7 +49,7 @@ if (isset($_POST['upload'])) {
 
 if (isset($_GET['visualizza'])) {
 
-    $query = "SELECT nome FROM Documenti";
+    $query = "SELECT nome, data  FROM Documenti";
     $result = $connection->query($query);
 
     if ($result->num_rows > 0) {
@@ -54,6 +57,7 @@ if (isset($_GET['visualizza'])) {
         echo "<table border='1'>";
         echo "<tr>"; 
         echo "<th>Nome File</th>"; 
+        echo "<th>Data Inserimento</th>"; 
         echo "<th>Link Contenuto</th>"; 
         echo "</tr>";
 
