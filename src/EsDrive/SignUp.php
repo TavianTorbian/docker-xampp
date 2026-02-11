@@ -18,7 +18,7 @@
     $conferma_password = $_POST['confermapassword'];
 
     if ($password !== $conferma_password) {
-        echo "Le password non corrispondono!";
+        echo "<p style='color:orange'>Le password non corrispondono!</p>";
         echo "<br><br>";
         echo "<a href='SignUp.html'>Torna alla Registrazione!</a>";
     }else{
@@ -30,7 +30,7 @@
 
         if ($result->num_rows > 0) 
         {
-            echo "Utente già presente!";
+            echo "<p style='color:orange'>Utente già presente!</p>";
             echo "<br><br>";
             echo "<a href='Login.html'>Torna al Login!</a>";
         }else{
@@ -42,7 +42,7 @@
             {
                 header("Location: Dashboard.php");
             }else{
-                echo "Registrazione non effettuata!";
+                echo "<p style='color:red'>Registrazione non effettuata!</p>";
             }
         }
     }

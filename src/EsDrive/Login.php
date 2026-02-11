@@ -32,12 +32,12 @@ if ($connection->connect_error)
             $_SESSION['email'] = $email;
             header("Location: Dashboard.php");
         } else {
-            echo "Password errata!";
+            echo "<p style='color:red'>Password Errata!</p>";
         }
     } 
     else 
     {
-        echo "Utente non trovato!";
+        echo "<p style='color:orange'>Utente non trovato!</p>";
     }
     $connection->close();
 ?>
