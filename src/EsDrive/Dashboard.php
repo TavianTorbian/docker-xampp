@@ -35,7 +35,7 @@ if (isset($_SESSION['email'])) {
 
 if (isset($_POST['upload'])) {
 
-    $nome= $_POST['nome'];
+    $nome= htmlspecialcharts($_POST['nome']);
     $data = $_POST['CURDATE()'];
     $file = $_FILES['file']['tmp_name'];
 

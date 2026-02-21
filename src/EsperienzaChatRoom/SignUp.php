@@ -13,9 +13,9 @@
         die("Errore di connessione: " . $connection->connect_error);
     }
     
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $conferma_password = $_POST['confermapassword'];
+    $username = htmlspecialcharts($_POST['username']);
+    $password = htmlspecialcharts($_POST['password']);
+    $conferma_password = htmlspecialcharts($_POST['confermapassword']);
 
     if ($password !== $conferma_password) {
         echo "Le password non corrispondono!";

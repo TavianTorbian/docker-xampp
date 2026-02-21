@@ -14,8 +14,8 @@ if ($connection->connect_error)
     die("Errore di connessione: " . $connection->connect_error);
 }
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = htmlspecialcharts($_POST['email']);
+    $password = htmlspecialcharts($_POST['password']);
 
     $stmt = $connection->prepare("SELECT * FROM utenti WHERE email = ?");
     $stmt->bind_param("s", $email);
