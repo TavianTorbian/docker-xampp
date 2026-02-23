@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Creato il: Feb 11, 2026 alle 11:15
+-- Creato il: Feb 23, 2026 alle 07:42
 -- Versione del server: 11.3.2-MariaDB-1:11.3.2+maria~ubu2204
 -- Versione PHP: 8.2.27
 
@@ -24,25 +24,15 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `Caricamento`
+-- Struttura della tabella `documenti`
 --
 
-CREATE TABLE `Caricamento` (
-  `email` varchar(255) NOT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `Documenti`
---
-
-CREATE TABLE `Documenti` (
+CREATE TABLE `documenti` (
   `id` int(11) NOT NULL,
-  `nome` varchar(50) NOT NULL,
-  `content` blob NOT NULL,
-  `data` date NOT NULL
+  `id_utente` int(11) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `data` date NOT NULL,
+  `percorso` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -52,8 +42,9 @@ CREATE TABLE `Documenti` (
 --
 
 CREATE TABLE `utenti` (
+  `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -61,32 +52,33 @@ CREATE TABLE `utenti` (
 --
 
 --
--- Indici per le tabelle `Caricamento`
+-- Indici per le tabelle `documenti`
 --
-ALTER TABLE `Caricamento`
-  ADD KEY `email` (`email`,`id`),
-  ADD KEY `id` (`id`);
-
---
--- Indici per le tabelle `Documenti`
---
-ALTER TABLE `Documenti`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `documenti`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_utente` (`id_utente`);
 
 --
 -- Indici per le tabelle `utenti`
 --
 ALTER TABLE `utenti`
-  ADD PRIMARY KEY (`email`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT per la tabella `Documenti`
+-- AUTO_INCREMENT per la tabella `documenti`
 --
-ALTER TABLE `Documenti`
+ALTER TABLE `documenti`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `utenti`
+--
+ALTER TABLE `utenti`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -94,11 +86,10 @@ ALTER TABLE `Documenti`
 --
 
 --
--- Limiti per la tabella `Caricamento`
+-- Limiti per la tabella `documenti`
 --
-ALTER TABLE `Caricamento`
-  ADD CONSTRAINT `Caricamento_ibfk_1` FOREIGN KEY (`email`) REFERENCES `utenti` (`email`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `Caricamento_ibfk_2` FOREIGN KEY (`id`) REFERENCES `Documenti` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `documenti`
+  ADD CONSTRAINT `documenti_ibfk_1` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

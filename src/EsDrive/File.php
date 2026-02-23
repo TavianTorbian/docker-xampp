@@ -18,7 +18,7 @@ if (isset($_SESSION['email'])) {
     if(isset($_FILES['file'])){
         $path = $_FILES['file']['tmp_name'];
         if(file_exists($path)){
-            $content = file_get_contents($_FILES['file']['tmp_name']);
+            readfile($path);
         }else{
             echo "<p style='color:red'>File non trovato!</p>";
         }

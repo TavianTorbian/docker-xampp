@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-if (isset($_SESSION['email'])) {
     $host = 'db'; 
     $dbname = 'Drive'; 
     $user = 'user';
@@ -13,65 +12,68 @@ if (isset($_SESSION['email'])) {
     if ($connection->connect_error) {
         die("Errore di connessione: " . $connection->connect_error);
     }
-}
 ?>
 
-<h1>Benvenuto nel Drive!</h1>
-<h3> + Nuovo</h3>
-<form method="post" action="Dashboard.php">
-    <label>Carica File:</label><br>
-    <input type="file" name="file" required><br>
+<h1>Benvenuto nel tuo Drive!</h1>
+<br><br>
+<form method="post" action="Dashboard.php" enctype="multipart/form-data">
+    <input type="file" name="file" id="file"><br>
     <br><br>
-    <input type="submit" name="upload" value="Inserisci">
+    <input type="submit" name="upload" value="Carica File">
 </form>
 <br><br>
-<h3>Visualizzazione File Caricati</h3>
+<h3>Visualizzazione File Caricati...</h3>
 <form method="get" action="Dashboard.php">
     <input type="submit" name="visualizza" value="Visualizza">
 </form>
 <br><br>
 
 <?php
+if (isset($_SESSION['email'])) {
 
-if (isset($_POST['upload'])) {
+    if (isset($_POST['upload']) && isset($_FILES['file'])) {
 
-    $nome= htmlspecialcharts($_POST['nome']);
-    $data = $_POST['CURDATE()'];
-    $file = $_FILES['file']['tmp_name'];
+        $nome= $_POST['nome'];
+        $path = $_FILES['file']['tmp_name'];
+        if(file_exists($path)){
 
-    $query = "INSERT INTO Documenti(nome, data, content) VALUES ('$nome', '$data', '$file')";
-    if ($connection->query($query)) {
-        echo "<p style='color:green'>File caricato con successo!</p>";
-    } else {
-        echo "<p style='color:red'>Errore nel caricamento del file</p>";
-    }
-}
+            $contenuto = file_get_contents($path);
+            $query = "INSERT INTO Documenti(nome, data, content) VALUES ('$nome', 'CURDATE()', '$contenuto')";
 
-if (isset($_GET['visualizza'])) {
-
-    $query = "SELECT nome, data  FROM Documenti";
-    $result = $connection->query($query);
-
-    if ($result->num_rows > 0) {
-        echo "<h3>File caricati:</h3>";
-        echo "<table border='1'>";
-        echo "<tr>"; 
-        echo "<th>Nome File</th>"; 
-        echo "<th>Data Inserimento</th>"; 
-        echo "<th>Link Contenuto</th>"; 
-        echo "</tr>";
-
-        while ($row = $result->fetch_assoc()) {
-            echo '<tr>';
-            echo "<td>". $row['nome'] . "</td>";
-            echo "<td><a href='File.php?nome=" . $row['nome'] . "'>Vedi Content</a></td>";
-            echo '</tr>';
+            if ($connection->query($query)) {
+                echo "<p style='color:green'>File caricato con successo!</p>";
+            } else {
+                echo "<p style='color:red'>Errore nel caricamento del file</p>";
+            }
         }
-        echo "</table>";
-    } else {
-        echo "<p style='color:orange'>Nessun File disponibile...</p>";
     }
-}
 
-$connection->close();
+    if (isset($_GET['visualizza'])) {
+
+        $query = "SELECT nome, data  FROM Documenti";
+        $result = $connection->query($query);
+
+        if ($result->num_rows > 0) {
+            echo "<h3>File caricati:</h3>";
+            echo "<table border='1'>";
+            echo "<tr>"; 
+            echo "<th>Nome File</th>"; 
+            echo "<th>Data Inserimento</th>"; 
+            echo "<th>Link Contenuto</th>"; 
+            echo "</tr>";
+
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>';
+                echo "<td>". $row['nome'] . "</td>";
+                echo "<td><a href='File.php?nome=" . $row['nome'] . "'>Vedi Content</a></td>";
+                echo '</tr>';
+            }
+            echo "</table>";
+        } else {
+            echo "<p style='color:orange'>Nessun File disponibile...</p>";
+        }
+    }
+}else{
+    header("Location: Login.php");
+}
 ?>
