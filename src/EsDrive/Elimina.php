@@ -9,14 +9,13 @@
     $dbname = 'Drive';
     $user = 'user';
     $dbpassword = 'user';
-    $port = 3306;
+        $port = 3306;
 
     $connection = new mysqli($host, $user, $dbpassword, $dbname, $port);
 
     if ($connection->connect_error) {
         die("Errore di connessione: " . $connection->connect_error);
     }
-
     $idUtente = $_SESSION['id'];
 
     if (isset($_POST['delete_id']) && !isset($_POST['definitivo'])) {
@@ -38,7 +37,7 @@
         $result = $stmt->get_result();
 
         if ($result->num_rows === 0) {
-            header("Location: Cestino.php?msg=error");
+            header("Location: cestino.php?msg=error");
         }
 
         $row = $result->fetch_assoc();
@@ -52,8 +51,7 @@
         $stmt->bind_param("ii", $idDocumento, $idUtente);
         $stmt->execute();
 
-        header("Location: Cestino.php?msg=deleted");
+        header("Location: cestino.php?msg=deleted");
+        exit;
     }
-
-    header("Location: Dashboard.php?msg=error");
 ?>
