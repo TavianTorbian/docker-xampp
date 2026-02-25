@@ -19,6 +19,27 @@ if (!isset($_SESSION['id'])) {
     }
 
     $idUtente = $_SESSION['id'];
+
+    if (isset($_POST['delete_id'])) { 
+        $idDocumento = intval($_POST['delete_id']); 
+        $stmt = $connection->prepare("SELECT percorso FROM documenti WHERE id = ? AND id_utente = ?"); 
+        $stmt->bind_param("ii", $idDocumento, $idUtente); 
+        $stmt->execute(); 
+        $result = $stmt->get_result(); 
+        if ($result->num_rows > 0) { 
+            $row = $result->fetch_assoc(); 
+            $percorso = $row['percorso']; 
+            if (file_exists($percorso)) { 
+                unlink($percorso); 
+            } 
+            $stmt = $connection->prepare("DELETE FROM documenti WHERE id = ? AND id_utente = ?"); 
+            $stmt->bind_param("ii", $idDocumento, $idUtente); 
+            $stmt->execute(); 
+            echo "<p style='color:green'>File eliminato con successo!</p>"; 
+        } else { 
+            echo "<p style='color:red'>Errore: file non trovato o non autorizzato.</p>"; 
+        } 
+    }
 }
 ?>
 
@@ -52,28 +73,35 @@ if (!isset($_SESSION['id'])) {
 
     if (isset($_GET['visualizza'])) {
 
-        $stmt = $connection->prepare("SELECT nome, data, percorso FROM documenti WHERE id_utente = ?");
-        $stmt->bind_param("i", $idUtente);
-        $stmt->execute();
+        $stmt = $connection->prepare("SELECT id, nome, data, percorso FROM documenti WHERE id_utente = ?"); 
+        $stmt->bind_param("i", $idUtente); 
+        $stmt->execute(); 
         $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            echo "<table border='1'>";
-            echo "<tr>";
-            echo "<th>Nome File</th>";
-            echo "<th>Data</th>";
-            echo "<th>Apri</th>";
-            echo "</tr>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['nome']}</td>";
-                echo "<td>{$row['data']}</td>";
-                echo "<td><a href='{$row['percorso']}' target='_blank'>Apri</a></td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "<p style='color:orange'>Non hai ancora caricato file.</p>";
+        if ($result->num_rows > 0) { 
+            echo "<table border='1'>"; 
+            echo "<tr> <th>Nome File</th> <th>Data</th> <th>Apri</th> <th>Elimina</th> <th>Rinomina</th> </tr>"; 
+            while ($row = $result->fetch_assoc()) { 
+                echo "<tr>"; echo "<td>{$row['nome']}</td>"; 
+                echo "<td>{$row['data']}</td>"; 
+                echo "<td><a href='{$row['percorso']}' target='_blank'>Apri</a></td>"; 
+                echo "<td> <form method='post' action='Dashboard.php' onsubmit='return confermaEliminazione()'> 
+                            <input type='hidden' name='delete_id' value='{$row['id']}'> 
+                            <button type='submit'>Elimina</button> 
+                            </form> 
+                    </td>"; 
+                echo "<td><a href='#'>Rinomina</a></td>"; 
+                echo "</tr>"; 
+            } 
+                echo "</table>"; 
+        } else { 
+            echo "<p style='color:orange'>Non hai ancora caricato file.</p>"; 
         }
     }
-?>
+?>   
+
+<script> 
+function confermaEliminazione() { 
+    return confirm("Sei sicuro di voler eliminare questo file?"); 
+} 
+</script>
