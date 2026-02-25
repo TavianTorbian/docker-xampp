@@ -52,7 +52,7 @@ if (!isset($_SESSION['id'])) {
 
     if (isset($_GET['visualizza'])) {
 
-        $stmt = $connection->prepare("SELECT id, nome, data, percorso FROM documenti WHERE id_utente = ?"); 
+        $stmt = $connection->prepare("SELECT id, nome, data, percorso FROM documenti WHERE id_utente = ? AND cestinato = 0"); 
         $stmt->bind_param("i", $idUtente); 
         $stmt->execute(); 
         $result = $stmt->get_result();
@@ -68,14 +68,14 @@ if (!isset($_SESSION['id'])) {
                 echo "<td><a href='{$row['percorso']}' target='_blank'>Apri</a></td>"; 
                 //------------------Eliminazione--------------------
                 echo "<td> 
-                <form method='post' action='elimina.php' onsubmit='return confermaEliminazione()'> 
+                <form method='post' action='Elimina.php' onsubmit='return confermaEliminazione()'> 
                 <input type='hidden' name='delete_id' value='{$row['id']}'> 
                 <button type='submit'>Elimina</button> 
                 </form> 
                 </td>";
                 //----------------Rinominazione----------------------
                 echo "<td> 
-                <form method='post' action='rinomina.php' onsubmit='return rinominaFile(this)'> 
+                <form method='post' action='Rinomina.php' onsubmit='return rinominaFile(this)'> 
                 <input type='hidden' name='rename_id' value='{$row['id']}'> 
                 <input type='hidden' name='old_name' value='{$row['nome']}'> 
                 <button type='submit'>Rinomina</button> 
@@ -87,6 +87,18 @@ if (!isset($_SESSION['id'])) {
             echo "<p style='color:orange'>Non hai ancora caricato file.</p>"; 
         }
     }
+
+    if (isset($_GET['msg'])) { 
+        if ($_GET['msg'] === 'deleted') { 
+            echo "<p style='color:green'>File eliminato con successo!</p>"; 
+        } 
+        if ($_GET['msg'] === 'renamed') { 
+            echo "<p style='color:green'>File rinominato con successo!</p>"; 
+        } 
+    }
+
+    echo "<br><br>";
+    echo "<a href='Cestino.php'>Vai al Cestino!</a>";
 ?>   
 
 <script> 
