@@ -19,27 +19,6 @@ if (!isset($_SESSION['id'])) {
     }
 
     $idUtente = $_SESSION['id'];
-
-    if (isset($_POST['delete_id'])) { 
-        $idDocumento = intval($_POST['delete_id']); 
-        $stmt = $connection->prepare("SELECT percorso FROM documenti WHERE id = ? AND id_utente = ?"); 
-        $stmt->bind_param("ii", $idDocumento, $idUtente); 
-        $stmt->execute(); 
-        $result = $stmt->get_result(); 
-        if ($result->num_rows > 0) { 
-            $row = $result->fetch_assoc(); 
-            $percorso = $row['percorso']; 
-            if (file_exists($percorso)) { 
-                unlink($percorso); 
-            } 
-            $stmt = $connection->prepare("DELETE FROM documenti WHERE id = ? AND id_utente = ?"); 
-            $stmt->bind_param("ii", $idDocumento, $idUtente); 
-            $stmt->execute(); 
-            echo "<p style='color:green'>File eliminato con successo!</p>"; 
-        } else { 
-            echo "<p style='color:red'>Errore: file non trovato o non autorizzato.</p>"; 
-        } 
-    }
 }
 ?>
 
@@ -82,16 +61,26 @@ if (!isset($_SESSION['id'])) {
             echo "<table border='1'>"; 
             echo "<tr> <th>Nome File</th> <th>Data</th> <th>Apri</th> <th>Elimina</th> <th>Rinomina</th> </tr>"; 
             while ($row = $result->fetch_assoc()) { 
-                echo "<tr>"; echo "<td>{$row['nome']}</td>"; 
+                echo "<tr>"; 
+                echo "<td>{$row['nome']}</td>"; 
                 echo "<td>{$row['data']}</td>"; 
+                //------------------Apri-------------------
                 echo "<td><a href='{$row['percorso']}' target='_blank'>Apri</a></td>"; 
-                echo "<td> <form method='post' action='Dashboard.php' onsubmit='return confermaEliminazione()'> 
-                            <input type='hidden' name='delete_id' value='{$row['id']}'> 
-                            <button type='submit'>Elimina</button> 
-                            </form> 
-                    </td>"; 
-                echo "<td><a href='#'>Rinomina</a></td>"; 
-                echo "</tr>"; 
+                //------------------Eliminazione--------------------
+                echo "<td> 
+                <form method='post' action='elimina.php' onsubmit='return confermaEliminazione()'> 
+                <input type='hidden' name='delete_id' value='{$row['id']}'> 
+                <button type='submit'>Elimina</button> 
+                </form> 
+                </td>";
+                //----------------Rinominazione----------------------
+                echo "<td> 
+                <form method='post' action='rinomina.php' onsubmit='return rinominaFile(this)'> 
+                <input type='hidden' name='rename_id' value='{$row['id']}'> 
+                <input type='hidden' name='old_name' value='{$row['nome']}'> 
+                <button type='submit'>Rinomina</button> 
+                </form> 
+                </td>";
             } 
                 echo "</table>"; 
         } else { 
@@ -104,4 +93,19 @@ if (!isset($_SESSION['id'])) {
 function confermaEliminazione() { 
     return confirm("Sei sicuro di voler eliminare questo file?"); 
 } 
+
+function rinominaFile(form) { 
+    let oldName = form.querySelector("input[name='old_name']").value; 
+    let nuovoNome = prompt("Inserisci il nuovo nome del file:", oldName); 
+    if (nuovoNome === null || nuovoNome.trim() === "") { 
+        return false; 
+    } 
+    let input = document.createElement("input"); 
+    input.type = "hidden"; 
+    input.name = "new_name"; 
+    input.value = nuovoNome; 
+    form.appendChild(input); 
+    return true; 
+}
+
 </script>
