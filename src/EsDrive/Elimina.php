@@ -37,7 +37,7 @@
         $result = $stmt->get_result();
 
         if ($result->num_rows === 0) {
-            header("Location: cestino.php?msg=error");
+            header("Location: Cestino.php?msg=error");
         }
 
         $row = $result->fetch_assoc();
@@ -51,7 +51,9 @@
         $stmt->bind_param("ii", $idDocumento, $idUtente);
         $stmt->execute();
 
-        header("Location: cestino.php?msg=deleted");
+        header("Location: Cestino.php?msg=deleted");
         exit;
     }
+
+    header("Location: Cestino.php?msg=deleted");
 ?>

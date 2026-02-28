@@ -20,7 +20,7 @@
     $idUtente = $_SESSION['id'];
 
     if (!isset($_POST['id'])) {
-        header("Location: cestino.php?msg=error");
+        header("Location: Cestino.php?msg=error");
     }
 
     $idDocumento = intval($_POST['id']);

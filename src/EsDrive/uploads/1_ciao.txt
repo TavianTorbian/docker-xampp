@@ -1,0 +1,186 @@
+import java.io.IOException;
+import java.net.Socket;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+
+public class App {
+    public static void main(String[] args) throws Exception{
+        final int PORT = 5500;
+
+        try{
+            ServerSocket server = new ServerSocket(PORT);
+            ArrayList<Thread> listaConnessioni = new ArrayList<Thread>();
+            ListaClienti clienti = new ListaClienti();
+            System.out.println("Il Server è aperto!");
+            System.out.println("Il Server attende connessioni ...");
+            while(true){
+                Socket newcliente = server.accept();
+                clienti.AggiungiCliente(newcliente);
+                Thread t1 = new Thread(new ThreadConnessione(newcliente, clienti));
+                listaConnessioni.add(t1);
+                listaConnessioni.get(listaConnessioni.size()-1).start();
+            }
+        }catch(IOException e){
+            System.out.println("Errore di connessione!");
+        }
+    }
+}
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class ListaClienti {
+    private ArrayList<Socket> sockets;
+
+    public ListaClienti(){
+        sockets = new ArrayList<>();
+    }
+
+    public synchronized void AggiungiCliente(Socket c) throws IOException{
+        sockets.add(c);
+    }
+
+    public synchronized void RimuoviCliente(int i) throws IOException{
+        sockets.get(i).close();
+        sockets.remove(i);
+    }
+
+    public synchronized void MandaTutto(String msg, Socket cliente) throws IOException{
+        for(Socket socket: sockets){
+            if(socket!=cliente){
+                PrintWriter out = new PrintWriter(socket.getOutputStream());
+                out.println(msg);
+                out.flush();
+            }
+        }
+    }
+}
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+public class ThreadRicevi implements Runnable{
+    private Socket socket;
+    BufferedReader in;
+
+    public ThreadRicevi(Socket socket) throws IOException{
+        this.socket = socket;
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    }
+
+    public void run(){
+        String msg;
+        try{
+            msg = in.readLine();
+            while (msg!=null) {
+                System.out.println(msg);
+                msg = in.readLine();
+            }
+            System.out.println("Server Chiuso!");
+            socket.close();
+        }catch(IOException e){
+            System.out.println("Errore di connessione!");
+        }
+    }
+    
+}
+
+
+
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class ThreadInvio implements Runnable{
+    private Scanner sc;
+    private PrintWriter out;
+
+    public ThreadInvio(Socket socket) throws IOException{
+        sc = new Scanner(System.in);
+        out = new PrintWriter(socket.getOutputStream());
+    }
+
+    public void run(){
+        String msg;
+        boolean primo=true;
+        while(!Thread.interrupted()){
+            if(primo){
+                System.out.println("Nome Utente: ");
+            }
+            msg = sc.nextLine();
+            out.println(msg);
+            out.flush();
+            if(primo){
+                System.out.println("Utente acquisito, scrivi un messaggio...: ");
+                primo = false;
+            }
+        }
+    }
+}
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+public class ThreadConnessione implements Runnable{
+    private Socket cliente;
+    private BufferedReader in;
+    private ListaClienti clienti;
+    private String nome;
+
+    public ThreadConnessione(Socket cliente, ListaClienti clienti) throws IOException{
+        this.cliente=cliente;
+        this.clienti=clienti;
+        in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+        nome = "Errore!";
+    }
+
+    public void run(){
+        String msg;
+        boolean primo = true;
+        try{
+            while (Thread.interrupted()) {
+                msg = in.readLine();
+                if(primo){
+                    nome = msg;
+                    System.out.println(nome + " Connesso!");
+                    primo=false;
+                }else{
+                    clienti.MandaTutto(nome + ": " + msg, cliente);
+                }
+            }
+        }catch(IOException e){
+            System.out.println("Connessione interrotta con " + nome);
+        }
+    }
+}
+
+
+
+
+import java.io.IOException;
+import java.net.Socket;
+
+public class Cliente {
+    public static void main(String[] args){
+        Socket socketclient;
+        try{
+            socketclient = new Socket ("127.0.0.1", 5500);
+            Thread invio = new Thread(new ThreadInvio(socketclient));
+            Thread ricevi = new Thread(new ThreadRicevi(socketclient));
+            invio.start();
+            ricevi.start();
+        }catch(IOException e){
+            System.out.println("Impossibile connettersi al server!");
+        }
+    }
+}
+
