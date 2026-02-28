@@ -9,7 +9,7 @@
     $dbname = 'Drive';
     $user = 'user';
     $dbpassword = 'user';
-        $port = 3306;
+    $port = 3306;
 
     $connection = new mysqli($host, $user, $dbpassword, $dbname, $port);
 
@@ -26,6 +26,7 @@
         $stmt->execute();
 
         header("Location: Dashboard.php?msg=trashed");
+        exit;
     }
 
     if (isset($_POST['delete_id']) && isset($_POST['definitivo'])) {
@@ -47,13 +48,11 @@
             unlink($percorso);
         }
 
-        $stmt = $connection->prepare("DELETE FROM documenti WHERE id = ? AND id_utente = ?");
-        $stmt->bind_param("ii", $idDocumento, $idUtente);
-        $stmt->execute();
+       $stmt = $connection->prepare("DELETE FROM documenti WHERE id = ? AND id_utente = ?");
+       $stmt->bind_param("ii", $idDocumento, $idUtente);
+       $stmt->execute();
 
         header("Location: Cestino.php?msg=deleted");
         exit;
     }
-
-    header("Location: Cestino.php?msg=deleted");
 ?>
