@@ -1,22 +1,54 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <!-- Bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+
+    <!-- CSS personalizzato -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-      <h1>Effettua il login per entrare nel drive</h1>
-      <form action="Login.php" method="post">
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
-      </form>
-      <h1>Non Hai un account?</h1>
-      <p></p>
-      <a href="SignUp.html">Registrazione</a>
+
+<section class="section">
+    <div class="container">
+        <div class="column is-half is-offset-one-quarter">
+            <div class="box custom-box">
+
+                <h1 class="title has-text-centered">Effettua il login per entrare nel drive</h1>
+
+                <form action="Login.php" method="post">
+                    <div class="field">
+                        <label class="label" for="email">Email</label>
+                        <div class="control">
+                            <input class="input" type="email" id="email" name="email" placeholder="Inserisci la tua email">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="password">Password</label>
+                        <div class="control">
+                            <input class="input" type="password" id="password" name="password" placeholder="Inserisci la password">
+                        </div>
+                    </div>
+
+                    <div class="field has-text-centered">
+                        <button class="button is-primary is-fullwidth custom-button">Login</button>
+                    </div>
+                </form>
+
+                <p class="has-text-centered mt-4">
+                    Non hai un account?  
+                    <a href="SignUp.html">Registrati</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 </body>
 </html>
