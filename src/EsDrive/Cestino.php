@@ -44,9 +44,10 @@
 
             //----------------Elimina Definitivamente---------------------
             echo "<td>
-                <form method='post' action='Elimina.php' onsubmit='return confirm(\"Eliminare definitivamente?\")'>
-                    <input type='hidden' name='id' value='{$row['id']}'>
-                    <button type='submit'>Elimina</button>
+                <form method='post' action='Elimina.php' onsubmit='return confermaEliminazione()'>
+                    <input type='hidden' name='delete_id' value='{$row['id']}'>
+                    <input type='hidden' name='definitivo' value='1'>
+                    <button type='submit'>Elimina definitivamente</button>
                 </form>
               </td>";
             echo "</tr>";
