@@ -30,27 +30,9 @@ if (!isset($_SESSION['id'])) {
 </form>
 <br><br>
 <h2>I tuoi file: </h2>
-<form method="get" action="Dashboard.php">
-    <input type="submit" name="visualizza" value="Visualizza File">
-</form>
 <br>
 
 <?php
-
-    if (isset($_POST['upload']) && isset($_FILES['file'])){ 
-        $nome = $_FILES['file']['name']; 
-        $path = $_FILES['file']['tmp_name']; 
-        $dest = "uploads/" . $idUtente . "_" . $nome; 
-        if (move_uploaded_file($path, $dest)){ 
-            $stmt = $connection->prepare( "INSERT INTO documenti (id_utente, nome, data, percorso) VALUES (?, ?, CURDATE(), ?)" ); 
-            $stmt->bind_param("iss", $idUtente, $nome, $dest); 
-            $stmt->execute(); echo "<p style='color:green'>File caricato con successo!</p>"; 
-        } else { 
-            echo "<p style='color:red'>Errore nel caricamento del file.</p>";
-        } 
-    }
-
-    if (isset($_GET['visualizza'])) {
 
         $stmt = $connection->prepare("SELECT id, nome, data, percorso FROM documenti WHERE id_utente = ? AND cestinato = 0"); 
         $stmt->bind_param("i", $idUtente); 
@@ -86,7 +68,22 @@ if (!isset($_SESSION['id'])) {
         } else { 
             echo "<p style='color:orange'>Non hai ancora caricato file.</p>"; 
         }
-    }
+
+        if (isset($_POST['upload']) && isset($_FILES['file'])){ 
+            $nome = $_FILES['file']['name']; 
+            $path = $_FILES['file']['tmp_name']; 
+            $dest = "uploads/" . $idUtente . "_" . $nome; 
+            if (move_uploaded_file($path, $dest)){ 
+                $stmt = $connection->prepare( "INSERT INTO documenti (id_utente, nome, data, percorso) VALUES (?, ?, CURDATE(), ?)" ); 
+                $stmt->bind_param("iss", $idUtente, $nome, $dest); 
+                $stmt->execute(); echo "<p style='color:green'>File caricato con successo!</p>"; 
+            } else { 
+                echo "<p style='color:red'>Errore nel caricamento del file.</p>";
+            } 
+        }
+
+        echo "<br><br>";
+        echo "<a href='Cestino.php'>Vai al Cestino!</a>";
 
     if (isset($_GET['msg'])) { 
         if ($_GET['msg'] === 'deleted') { 
@@ -97,8 +94,7 @@ if (!isset($_SESSION['id'])) {
         } 
     }
 
-    echo "<br><br>";
-    echo "<a href='Cestino.php'>Vai al Cestino!</a>";
+
 ?>   
 
 <script> 
