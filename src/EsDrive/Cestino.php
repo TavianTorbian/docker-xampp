@@ -14,6 +14,11 @@
     $connection = new mysqli($host, $user, $dbpassword, $dbname, $port);
 
     $idUtente = $_SESSION['id'];
+    
+?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+<link rel="stylesheet" href="style.css">
+<?php
 
     $stmt = $connection->prepare("SELECT id, nome, data, percorso FROM documenti WHERE id_utente = ? AND cestinato = 1");
     $stmt->bind_param("i", $idUtente);
@@ -38,7 +43,7 @@
             echo "<td>
                 <form method='post' action='Ripristina.php'>
                     <input type='hidden' name='id' value='{$row['id']}'>
-                    <button type='submit'>Ripristina</button>
+                    <button class='button button-restore'>Ripristina</button>
                 </form>
               </td>";
 
@@ -47,7 +52,7 @@
                 <form method='post' action='Elimina.php' onsubmit='return confermaEliminazione()'>
                     <input type='hidden' name='delete_id' value='{$row['id']}'>
                     <input type='hidden' name='definitivo' value='1'>
-                    <button type='submit'>Elimina definitivamente</button>
+                    <button class='button button-delete'>Elimina</button>
                 </form>
               </td>";
             echo "</tr>";

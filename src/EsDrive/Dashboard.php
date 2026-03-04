@@ -21,7 +21,8 @@ if (!isset($_SESSION['id'])) {
     $idUtente = $_SESSION['id'];
 }
 ?>
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+<link rel="stylesheet" href="style.css">
 <h1>Benvenuto nel tuo Drive!</h1>
 <h2>Carica un nuovo file</h2>
 <form method="post" action="Dashboard.php" enctype="multipart/form-data">
@@ -33,6 +34,20 @@ if (!isset($_SESSION['id'])) {
 <br>
 
 <?php
+
+    if (isset($_POST['upload']) && isset($_FILES['file'])){ 
+        $nome = $_FILES['file']['name']; 
+        $path = $_FILES['file']['tmp_name']; 
+        $dest = "uploads/" . $idUtente . "_" . $nome; 
+        if (move_uploaded_file($path, $dest)){ 
+            $stmt = $connection->prepare( "INSERT INTO documenti (id_utente, nome, data, percorso) VALUES (?, ?, CURDATE(), ?)" ); 
+            $stmt->bind_param("iss", $idUtente, $nome, $dest); 
+            $stmt->execute(); 
+            echo "<p style='color:green'>File caricato con successo!</p>"; 
+        } else { 
+            echo "<p style='color:red'>Errore nel caricamento del file.</p>";
+        } 
+    }
 
         $stmt = $connection->prepare("SELECT id, nome, data, percorso FROM documenti WHERE id_utente = ? AND cestinato = 0"); 
         $stmt->bind_param("i", $idUtente); 
@@ -52,7 +67,7 @@ if (!isset($_SESSION['id'])) {
                 echo "<td> 
                 <form method='post' action='Elimina.php' onsubmit='return confermaEliminazione()'> 
                 <input type='hidden' name='delete_id' value='{$row['id']}'> 
-                <button type='submit'>Elimina</button> 
+                <button class='button button-delete'>Elimina</button>
                 </form> 
                 </td>";
                 //----------------Rinominazione----------------------
@@ -60,26 +75,13 @@ if (!isset($_SESSION['id'])) {
                 <form method='post' action='Rinomina.php' onsubmit='return rinominaFile(this)'> 
                 <input type='hidden' name='rename_id' value='{$row['id']}'> 
                 <input type='hidden' name='old_name' value='{$row['nome']}'> 
-                <button type='submit'>Rinomina</button> 
+                <button class='button button-rename'>Rinomina</button>
                 </form> 
                 </td>";
             } 
                 echo "</table>"; 
         } else { 
             echo "<p style='color:orange'>Non hai ancora caricato file.</p>"; 
-        }
-
-        if (isset($_POST['upload']) && isset($_FILES['file'])){ 
-            $nome = $_FILES['file']['name']; 
-            $path = $_FILES['file']['tmp_name']; 
-            $dest = "uploads/" . $idUtente . "_" . $nome; 
-            if (move_uploaded_file($path, $dest)){ 
-                $stmt = $connection->prepare( "INSERT INTO documenti (id_utente, nome, data, percorso) VALUES (?, ?, CURDATE(), ?)" ); 
-                $stmt->bind_param("iss", $idUtente, $nome, $dest); 
-                $stmt->execute(); echo "<p style='color:green'>File caricato con successo!</p>"; 
-            } else { 
-                echo "<p style='color:red'>Errore nel caricamento del file.</p>";
-            } 
         }
 
         echo "<br><br>";

@@ -1,41 +1,141 @@
-/* Sfondo generale */
+/* ===========================
+   LAYOUT GENERALE
+=========================== */
 body {
-    background: #f5f7fa;
-    font-family: "Inter", sans-serif;
-  }
-  
-  /* Box centrale */
-  .custom-box {
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    background: white;
-    transition: transform 0.2s ease;
-  }
-  
-  .custom-box:hover {
-    transform: translateY(-3px);
-  }
-  
-  /* Bottone */
-  .custom-button {
-    border-radius: 8px;
-    font-weight: 600;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
-  
-  .custom-button:hover {
-    background: #276cda;
-    transform: translateY(-2px);
-  }
-  
-  /* Link */
-  a {
-    font-weight: 600;
-    color: #3273dc;
-  }
-  
-  a:hover {
-    color: #2759a5;
-  }
-  
+  background: #f5f7fa;
+  font-family: "Inter", sans-serif;
+  padding: 2rem;
+}
+
+.container-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  max-width: 900px;
+  margin: 0 auto;
+  transition: transform .2s ease;
+}
+
+.container-box:hover {
+  transform: translateY(-3px);
+}
+
+/* ===========================
+   TITOLI
+=========================== */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+/* ===========================
+   TABELLE
+=========================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th {
+  background: #3273dc;
+  color: white;
+  padding: 0.8rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+table td {
+  padding: 0.8rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* ===========================
+   BOTTONI
+=========================== */
+.button-open,
+.button-delete,
+.button-rename,
+.button-restore {
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+  color: white;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.button-open {
+  background: #23d160;
+}
+.button-open:hover {
+  background: #1eb14f;
+}
+
+.button-delete {
+  background: #ff3860;
+}
+.button-delete:hover {
+  background: #d92d50;
+}
+
+.button-rename {
+  background: #3273dc;
+}
+.button-rename:hover {
+  background: #2759a5;
+}
+
+.button-restore {
+  background: #ffdd57;
+  color: #000;
+}
+.button-restore:hover {
+  background: #e6c84f;
+}
+
+/* ===========================
+   LINK
+=========================== */
+a {
+  font-weight: 600;
+  color: #3273dc;
+}
+
+a:hover {
+  color: #2759a5;
+}
+
+.cestino-link {
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ===========================
+   MESSAGGI
+=========================== */
+.msg-success {
+  color: #23d160;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.msg-error {
+  color: #ff3860;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.msg-warning {
+  color: #ffdd57;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
