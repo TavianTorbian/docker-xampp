@@ -26,9 +26,28 @@ if (!isset($_SESSION['id'])) {
 <h1>Benvenuto nel tuo Drive!</h1>
 <h2>Carica un nuovo file</h2>
 <form method="post" action="Dashboard.php" enctype="multipart/form-data">
-    <input type="file" name="file" required><br><br>
-    <input type="submit" name="upload" value="Carica File">
+    <div class="file has-name is-boxed is-primary">
+        <label class="file-label">
+            <input class="file-input" type="file" name="file" required>
+            <span class="file-cta">
+                <span class="file-icon">
+                    📁
+                </span>
+                <span class="file-label">
+                    Scegli un file…
+                </span>
+            </span>
+            <span class="file-name">
+                Nessun file selezionato
+            </span>
+        </label>
+    </div>
+    <br>
+    <button class="button is-primary" type="submit" name="upload">
+        Carica File
+    </button>
 </form>
+
 <br><br>
 <h2>I tuoi file: </h2>
 <br>
@@ -118,6 +137,15 @@ function rinominaFile(form) {
     return true; 
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.querySelector('.file-input');
+    const fileName = document.querySelector('.file-name');
 
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileName.textContent = fileInput.files[0].name;
+        }
+    });
+});
 
 </script>
